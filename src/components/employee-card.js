@@ -5,209 +5,207 @@ import {removeEmployee} from '../store/employeesSlice.js';
 import 'iconify-icon';
 
 export class EmployeeCard extends LitElement {
-  static get properties() {
-    return {
-      employee: {type: Object},
-    };
-  }
+  static properties = {
+    employee: {type: Object},
+  };
 
-  static get styles() {
-    return css`
+  static styles = css`
+    .card {
+      background: white;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .employee-details {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .detail-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .detail-label {
+      font-size: 0.75rem;
+      color: #666;
+      font-weight: 400;
+      letter-spacing: 0.5px;
+    }
+
+    .detail-value {
+      font-size: 0.9rem;
+      color: #333;
+      font-weight: 500;
+      line-height: 1.3;
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: flex-start;
+    }
+
+    .btn {
+      padding: 0.375rem 0.75rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      background: white;
+      color: #666;
+      font-size: 0.75rem;
+      font-weight: 400;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.375rem;
+      white-space: nowrap;
+    }
+
+    .btn:hover {
+      border-color: #999;
+      color: #333;
+      background: #f8f8f8;
+    }
+
+    .btn.edit {
+      color: #1976d2;
+      border-color: #1976d2;
+    }
+
+    .btn.edit:hover {
+      background: #e3f2fd;
+      border-color: #1565c0;
+      color: #1565c0;
+    }
+
+    .btn.delete {
+      color: #d32f2f;
+      border-color: #d32f2f;
+    }
+
+    .btn.delete:hover {
+      background: #ffebee;
+      border-color: #c62828;
+      color: #c62828;
+    }
+
+    /* Tablet styles */
+    @media (max-width: 1024px) {
       .card {
-        background: white;
-        border: 1px solid #e0e0e0;
-        border-radius: 8px;
-        padding: 1.5rem;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-      }
-
-      .card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        padding: 1.25rem;
       }
 
       .employee-details {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 1rem;
-        margin-bottom: 1.5rem;
-      }
-
-      .detail-item {
-        display: flex;
-        flex-direction: column;
-        gap: 0.25rem;
+        gap: 0.875rem;
       }
 
       .detail-label {
-        font-size: 0.75rem;
-        color: #666;
-        font-weight: 400;
-        letter-spacing: 0.5px;
+        font-size: 0.7rem;
       }
 
       .detail-value {
-        font-size: 0.9rem;
-        color: #333;
-        font-weight: 500;
-        line-height: 1.3;
+        font-size: 0.85rem;
+      }
+
+      .btn {
+        padding: 0.35rem 0.625rem;
+        font-size: 0.7rem;
+      }
+    }
+
+    /* Mobile styles */
+    @media (max-width: 768px) {
+      .card {
+        padding: 1rem;
+      }
+
+      .employee-details {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+      }
+
+      .detail-label {
+        font-size: 0.65rem;
+        letter-spacing: 0.3px;
+      }
+
+      .detail-value {
+        font-size: 0.8rem;
       }
 
       .card-actions {
-        display: flex;
-        gap: 0.75rem;
-        justify-content: flex-end;
+        gap: 0.5rem;
+      }
+
+      .btn {
+        padding: 0.3rem 0.5rem;
+        font-size: 0.65rem;
+        gap: 0.25rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .card {
+        padding: 0.875rem;
+      }
+
+      .employee-details {
+        gap: 0.625rem;
+        margin-bottom: 1.25rem;
+      }
+
+      .detail-label {
+        font-size: 0.6rem;
+        letter-spacing: 0.25px;
+      }
+
+      .detail-value {
+        font-size: 0.75rem;
+      }
+
+      .card-actions {
+        gap: 0.375rem;
+      }
+
+      .btn {
+        padding: 0.25rem 0.375rem;
+        font-size: 0.6rem;
+        gap: 0.2rem;
+      }
+    }
+
+    @media (min-width: 1200px) {
+      .card {
+        padding: 1.75rem;
+      }
+
+      .employee-details {
+        gap: 1.25rem;
+        margin-bottom: 1.75rem;
+      }
+
+      .detail-label {
+        font-size: 0.8rem;
+        letter-spacing: 0.6px;
+      }
+
+      .detail-value {
+        font-size: 1rem;
       }
 
       .btn {
         padding: 0.5rem 1rem;
-        border: none;
-        border-radius: 6px;
-        font-size: 0.85rem;
-        font-weight: 500;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        display: flex;
-        align-items: center;
+        font-size: 0.8rem;
         gap: 0.5rem;
-        white-space: nowrap;
       }
-
-      .btn.edit {
-        background: #6366f1;
-        color: white;
-      }
-
-      .btn.edit:hover {
-        background: #5855eb;
-        transform: translateY(-1px);
-      }
-
-      .btn.delete {
-        background: #ff6101;
-        color: white;
-      }
-
-      .btn.delete:hover {
-        background: #e55a00;
-        transform: translateY(-1px);
-      }
-
-      /* Tablet styles */
-      @media (max-width: 1024px) {
-        .card {
-          padding: 1.25rem;
-        }
-
-        .employee-details {
-          gap: 0.875rem;
-        }
-
-        .detail-label {
-          font-size: 0.7rem;
-        }
-
-        .detail-value {
-          font-size: 0.85rem;
-        }
-
-        .btn {
-          padding: 0.45rem 0.875rem;
-          font-size: 0.8rem;
-        }
-      }
-
-      /* Mobile styles */
-      @media (max-width: 768px) {
-        .card {
-          padding: 1rem;
-        }
-
-        .employee-details {
-          grid-template-columns: 1fr;
-          gap: 0.75rem;
-        }
-
-        .detail-label {
-          font-size: 0.65rem;
-          letter-spacing: 0.3px;
-        }
-
-        .detail-value {
-          font-size: 0.8rem;
-        }
-
-        .card-actions {
-          gap: 0.5rem;
-        }
-
-        .btn {
-          padding: 0.4rem 0.75rem;
-          font-size: 0.75rem;
-          gap: 0.375rem;
-        }
-      }
-
-      /* Small mobile styles */
-      @media (max-width: 480px) {
-        .card {
-          padding: 0.875rem;
-        }
-
-        .employee-details {
-          gap: 0.625rem;
-          margin-bottom: 1.25rem;
-        }
-
-        .detail-label {
-          font-size: 0.6rem;
-          letter-spacing: 0.25px;
-        }
-
-        .detail-value {
-          font-size: 0.75rem;
-        }
-
-        .card-actions {
-          gap: 0.375rem;
-        }
-
-        .btn {
-          padding: 0.35rem 0.625rem;
-          font-size: 0.7rem;
-          gap: 0.25rem;
-        }
-      }
-
-      /* Large desktop styles */
-      @media (min-width: 1200px) {
-        .card {
-          padding: 1.75rem;
-        }
-
-        .employee-details {
-          gap: 1.25rem;
-          margin-bottom: 1.75rem;
-        }
-
-        .detail-label {
-          font-size: 0.8rem;
-          letter-spacing: 0.6px;
-        }
-
-        .detail-value {
-          font-size: 1rem;
-        }
-
-        .btn {
-          padding: 0.6rem 1.25rem;
-          font-size: 0.9rem;
-          gap: 0.625rem;
-        }
-      }
-    `;
-  }
+    }
+  `;
 
   constructor() {
     super();

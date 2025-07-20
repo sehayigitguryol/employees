@@ -24,7 +24,6 @@
       "phone": "Telefon",
       "department": "Departman",
       "position": "Pozisyon",
-      "hireDate": "İşe Alım Tarihi",
       "save": "Kaydet",
       "cancel": "İptal",
       "create": {
@@ -40,7 +39,6 @@
       "phone": "Telefon",
       "department": "Departman",
       "position": "Pozisyon",
-      "hireDate": "İşe Alım Tarihi",
       "birthDate": "Doğum Tarihi",
       "firstName": "Ad",
       "lastName": "Soyad",
@@ -80,6 +78,15 @@
       "found": "Çalışan bulunamadı"
     }
   },
+  "validation": {
+    "title": "Lütfen aşağıdaki hataları düzeltin:",
+    "required": "{{field}} alanı zorunludur",
+    "email": "Lütfen geçerli bir e-posta adresi girin",
+    "phone": "Lütfen geçerli bir telefon numarası girin",
+    "date": "Lütfen geçerli bir tarih girin",
+    "minAge": "Çalışan en az {{age}} yaşında olmalıdır",
+    "pastDate": "İşe alım tarihi geçmişte veya bugün olmalıdır"
+  },
   "pagination": {
     "previous": "Önceki",
     "next": "Sonraki",
@@ -91,6 +98,16 @@
       "title": "Sayfa Bulunamadı",
       "message": "Aradığınız sayfa mevcut değil.",
       "back": "Ana Sayfaya Dön"
+    }
+  },
+  "dialog": {
+    "createEmployee": {
+      "title": "Çalışan Oluştur",
+      "description": "Bu çalışanı oluşturmak istediğinizden emin misiniz?"
+    },
+    "saveEmployee": {
+      "title": "Çalışanı Kaydet",
+      "description": "Bu çalışan üzerindeki değişiklikleri kaydetmek istediğinizden emin misiniz?"
     }
   },
   "language": {

@@ -24,7 +24,6 @@
       "phone": "Phone",
       "department": "Department",
       "position": "Position",
-      "hireDate": "Hire Date",
       "birthDate": "Birth Date",
       "save": "Save",
       "cancel": "Cancel",
@@ -43,7 +42,7 @@
       "position": "Position",
       "firstName": "First Name",
       "lastName": "Last Name",
-      "dateOfEmployment": "Hire Date",
+      "dateOfEmployment": "Date of Employment",
       "dateOfBirth": "Birth Date",
       "edit": "Edit",
       "delete": "Delete"
@@ -79,6 +78,15 @@
       "found": "Employee not found"
     }
   },
+  "validation": {
+    "title": "Please fix the following errors:",
+    "required": "{{field}} is required",
+    "email": "Please enter a valid email address",
+    "phone": "Please enter a valid phone number",
+    "date": "Please enter a valid date",
+    "minAge": "Employee must be at least {{age}} years old",
+    "pastDate": "Employment date must be in the past or today"
+  },
   "pagination": {
     "previous": "Previous",
     "next": "Next",
@@ -90,6 +98,16 @@
       "title": "Page Not Found",
       "message": "The page you are looking for does not exist.",
       "back": "Go Back Home"
+    }
+  },
+  "dialog": {
+    "createEmployee": {
+      "title": "Create Employee",
+      "description": "Are you sure you want to create this employee?"
+    },
+    "saveEmployee": {
+      "title": "Save Employee",
+      "description": "Are you sure you want to save the changes to this employee?"
     }
   },
   "language": {

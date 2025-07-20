@@ -10,6 +10,18 @@ const initialState = {
   },
   loading: false,
   error: null,
+  form: null,
+};
+
+const initialEmployeeForm = {
+  firstName: '',
+  lastName: '',
+  email: '',
+  phone: '',
+  position: '',
+  department: '',
+  dateOfEmployment: '',
+  dateOfBirth: '',
 };
 
 const employeesSlice = createSlice({
@@ -66,6 +78,13 @@ const employeesSlice = createSlice({
         searchText: '',
       };
     },
+    setForm: (state, action) => {
+      console.log('🔧 Setting form:', action.payload);
+      state.form = action.payload || {...initialEmployeeForm};
+    },
+    resetForm: (state) => {
+      state.form = {...initialEmployeeForm};
+    },
   },
 });
 
@@ -81,6 +100,8 @@ export const {
   setLoading,
   setError,
   resetFilters,
+  setForm,
+  resetForm,
 } = employeesSlice.actions;
 
 // Selectors
@@ -94,6 +115,7 @@ export const selectSearchText = (state) => state.employees.filters.searchText;
 export const selectLoading = (state) => state.employees.loading;
 export const selectError = (state) => state.employees.error;
 export const selectTotal = (state) => state.employees.length;
+export const selectForm = (state) => state.employees.form;
 
 // Filtered employees selector
 export const selectFilteredEmployees = (state) => {

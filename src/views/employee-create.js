@@ -1,6 +1,6 @@
 import {LitElement, html, css} from 'lit';
 import '../components/base-layout.js';
-import {i18nStore} from '../store/i18n-store.js';
+import './employee-form.js';
 
 export class EmployeeCreate extends LitElement {
   static get styles() {
@@ -13,8 +13,8 @@ export class EmployeeCreate extends LitElement {
 
   render() {
     return html`
-      <base-layout title="${i18nStore.translate('employee.create.title')}">
-        <p>${i18nStore.translate('employee.create.description')}</p>
+      <base-layout>
+        <employee-form></employee-form>
       </base-layout>
     `;
   }
