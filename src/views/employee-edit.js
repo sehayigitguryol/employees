@@ -2,6 +2,7 @@ import {LitElement, html, css} from 'lit';
 import '../components/base-layout.js';
 import {store} from '../store/ReduxProvider.js';
 import {selectEmployeeById} from '../store/employeesSlice.js';
+import './employee-form.js';
 
 export class EmployeeEdit extends LitElement {
   static get properties() {
@@ -27,7 +28,6 @@ export class EmployeeEdit extends LitElement {
     const match = path.match(/^\/edit\/(.+)$/);
     if (match) {
       this.employeeId = match[1];
-      console.log('Employee ID:', this.employeeId);
       this._checkEmployeeExists();
     } else {
       this._redirectTo404();
@@ -83,10 +83,7 @@ export class EmployeeEdit extends LitElement {
 
     return html`
       <base-layout title="Edit Employee">
-        <p>
-          Editing employee: ${this.employee.firstName} ${this.employee.lastName}
-        </p>
-        <p>Employee ID: ${this.employeeId}</p>
+        <employee-form .employee=${this.employee}></employee-form>
       </base-layout>
     `;
   }

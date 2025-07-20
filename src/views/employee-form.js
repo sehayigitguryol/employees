@@ -11,8 +11,10 @@ import {
   resetForm,
   selectForm,
   addEmployee,
+  updateEmployee,
 } from '../store/employeesSlice.js';
 import {validateEmployeeForm} from '../utils/validation.js';
+import router from '../router.js';
 
 export class EmployeeForm extends LitElement {
   static properties = {
@@ -21,6 +23,7 @@ export class EmployeeForm extends LitElement {
     validationErrors: {type: Object},
     showPrompt: {type: Boolean},
     showConfirmDialog: {type: Boolean},
+    isCreate: {type: Boolean},
   };
 
   static styles = css`
@@ -131,6 +134,7 @@ export class EmployeeForm extends LitElement {
     this.showPrompt = false;
     this.showConfirmDialog = false;
     this._debounceTimeout = null;
+    this.isCreate = false;
   }
 
   connectedCallback() {
@@ -145,8 +149,10 @@ export class EmployeeForm extends LitElement {
     // Dispatch the appropriate action based on whether we're editing or creating
     if (this.employee) {
       store.dispatch(setForm(this.employee));
+      this.isCreate = false;
     } else {
       store.dispatch(resetForm());
+      this.isCreate = true;
     }
 
     // Get state after dispatching
@@ -245,14 +251,18 @@ export class EmployeeForm extends LitElement {
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      store.dispatch(addEmployee(this.formData));
+      if (this.isCreate) {
+        store.dispatch(addEmployee(this.formData));
+      } else {
+        store.dispatch(updateEmployee(this.formData));
+      }
 
       // Show success message or redirect
-      alert(i18nStore.translate('message.employee.created'));
 
-      // Reset form and navigate back
+      // Reset form and navigate to employee list
       store.dispatch(resetForm());
-      window.history.back();
+      window.history.pushState(null, '', '/');
+      window.dispatchEvent(new PopStateEvent('popstate'));
     } catch (error) {
       alert(i18nStore.translate('error.saving'));
     } finally {

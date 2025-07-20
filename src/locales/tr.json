@@ -108,6 +108,10 @@
     "saveEmployee": {
       "title": "Çalışanı Kaydet",
       "description": "Bu çalışan üzerindeki değişiklikleri kaydetmek istediğinizden emin misiniz?"
+    },
+    "deleteEmployee": {
+      "title": "Çalışanı Sil",
+      "description": "Bu çalışanı silmek istediğinizden emin misiniz?"
     }
   },
   "language": {

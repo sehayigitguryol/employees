@@ -4,7 +4,7 @@ import './views/employee-create.js';
 import './views/employee-edit.js';
 import './views/not-found.js';
 import './store/index.js';
-import './store/init.js';
+import {initializeStore} from './store/init.js';
 
 const routes = [
   {
@@ -34,5 +34,8 @@ router.setRoutes(routes);
 
 // Initialize the router
 router.setOutlet(document.getElementById('outlet'));
+
+// Initialize store only once when app starts
+initializeStore();
 
 export default router;

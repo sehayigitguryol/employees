@@ -1,5 +1,5 @@
 import {store} from './index.js';
-import {setEmployees} from './employeesSlice.js';
+import {setEmployees, selectEmployees} from './employeesSlice.js';
 
 // Sample employee data
 const sampleEmployees = [
@@ -8,7 +8,7 @@ const sampleEmployees = [
     firstName: 'John',
     lastName: 'Doe',
     email: 'john.doe@company.com',
-    phone: '+1-555-123-4567',
+    phone: '0532 123 45 67',
     position: 'Senior',
     department: 'Tech',
     dateOfEmployment: '2023-01-15',
@@ -19,7 +19,7 @@ const sampleEmployees = [
     firstName: 'Jane',
     lastName: 'Smith',
     email: 'jane.smith@company.com',
-    phone: '+1-555-234-5678',
+    phone: '0532 123 45 67',
     position: 'Medior',
     department: 'Analytics',
     dateOfEmployment: '2022-08-20',
@@ -30,7 +30,7 @@ const sampleEmployees = [
     firstName: 'Mike',
     lastName: 'Johnson',
     email: 'mike.johnson@company.com',
-    phone: '+1-555-345-6789',
+    phone: '0532 123 45 67',
     position: 'Junior',
     department: 'Tech',
     dateOfEmployment: '2023-03-10',
@@ -41,7 +41,7 @@ const sampleEmployees = [
     firstName: 'Sarah',
     lastName: 'Wilson',
     email: 'sarah.wilson@company.com',
-    phone: '+1-555-456-7890',
+    phone: '0532 123 45 67',
     position: 'Senior',
     department: 'Analytics',
     dateOfEmployment: '2022-11-05',
@@ -52,7 +52,7 @@ const sampleEmployees = [
     firstName: 'David',
     lastName: 'Brown',
     email: 'david.brown@company.com',
-    phone: '+1-555-567-8901',
+    phone: '0532 123 45 67',
     position: 'Medior',
     department: 'Analytics',
     dateOfEmployment: '2023-02-28',
@@ -63,7 +63,7 @@ const sampleEmployees = [
     firstName: 'Emily',
     lastName: 'Davis',
     email: 'emily.davis@company.com',
-    phone: '+1-555-678-9012',
+    phone: '0532 123 45 67',
     position: 'Junior',
     department: 'Tech',
     dateOfEmployment: '2023-04-15',
@@ -72,7 +72,12 @@ const sampleEmployees = [
 ];
 
 export function initializeStore() {
-  store.dispatch(setEmployees(sampleEmployees));
-}
+  console.log('Initializing store');
+  // Only initialize with sample data if employees array is empty
+  const currentState = store.getState();
+  const currentEmployees = selectEmployees(currentState);
 
-initializeStore();
+  if (currentEmployees.length === 0) {
+    store.dispatch(setEmployees(sampleEmployees));
+  }
+}

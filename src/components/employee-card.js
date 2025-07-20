@@ -7,6 +7,7 @@ import 'iconify-icon';
 export class EmployeeCard extends LitElement {
   static properties = {
     employee: {type: Object},
+    showConfirmDialog: {type: Boolean},
   };
 
   static styles = css`
@@ -210,6 +211,7 @@ export class EmployeeCard extends LitElement {
   constructor() {
     super();
     this.employee = null;
+    this.showConfirmDialog = false;
   }
 
   connectedCallback() {
@@ -227,14 +229,22 @@ export class EmployeeCard extends LitElement {
 
   _handleEdit() {
     // Navigate to edit page
-    window.location.href = `/edit/${this.employee.id}`;
+    window.history.pushState(null, '', `/edit/${this.employee.id}`);
+    window.dispatchEvent(new PopStateEvent('popstate'));
   }
 
   _handleDelete() {
-    if (confirm(i18nStore.translate('message.confirm.delete'))) {
-      // Dispatch delete action to store
-      store.dispatch(removeEmployee(this.employee.id));
-    }
+    this.showConfirmDialog = true;
+    this.requestUpdate();
+  }
+
+  _handleCancelDelete() {
+    this.showConfirmDialog = false;
+  }
+
+  _handleConfirmDelete() {
+    this.showConfirmDialog = false;
+    store.dispatch(removeEmployee(this.employee.id));
   }
 
   render() {
@@ -318,6 +328,19 @@ export class EmployeeCard extends LitElement {
           </button>
         </div>
       </div>
+
+      <app-dialog
+        id="confirmDialog"
+        title="${i18nStore.translate('dialog.deleteEmployee.title')}"
+        description="${i18nStore.translate(
+          'dialog.deleteEmployee.description'
+        )}"
+        confirm-text="${i18nStore.translate('actions.delete')}"
+        cancel-text="${i18nStore.translate('actions.cancel')}"
+        ?open=${this.showConfirmDialog}
+        @cancel=${this._handleCancelDelete}
+        @confirm=${this._handleConfirmDelete}
+      ></app-dialog>
     `;
   }
 }
