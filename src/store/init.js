@@ -58,6 +58,17 @@ const sampleEmployees = [
     dateOfEmployment: '2023-02-28',
     dateOfBirth: '1992-07-25',
   },
+  {
+    id: '694718ed-ec5b-41e9-95a5-eb399a512805',
+    firstName: 'Emily',
+    lastName: 'Davis',
+    email: 'emily.davis@company.com',
+    phone: '+1-555-678-9012',
+    position: 'Junior',
+    department: 'Tech',
+    dateOfEmployment: '2023-04-15',
+    dateOfBirth: '1998-12-10',
+  },
 ];
 
 export function initializeStore() {

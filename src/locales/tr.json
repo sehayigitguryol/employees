@@ -25,7 +25,6 @@
       "department": "Departman",
       "position": "Pozisyon",
       "hireDate": "İşe Alım Tarihi",
-      "salary": "Maaş",
       "save": "Kaydet",
       "cancel": "İptal",
       "create": {
@@ -42,7 +41,11 @@
       "department": "Departman",
       "position": "Pozisyon",
       "hireDate": "İşe Alım Tarihi",
-      "salary": "Maaş",
+      "birthDate": "Doğum Tarihi",
+      "firstName": "Ad",
+      "lastName": "Soyad",
+      "dateOfEmployment": "İşe Alım Tarihi",
+      "dateOfBirth": "Doğum Tarihi",
       "edit": "Düzenle",
       "delete": "Sil"
     }

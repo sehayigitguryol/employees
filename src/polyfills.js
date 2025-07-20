@@ -5,3 +5,6 @@ if (typeof window !== 'undefined' && !window.process) {
     },
   };
 }
+
+// Initialize i18next
+import './i18n.js';

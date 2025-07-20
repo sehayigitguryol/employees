@@ -3,6 +3,9 @@ import '../components/base-layout.js';
 import '../components/tabs.js';
 import {store} from '../store/index.js';
 import {setPage, setSize} from '../store/employeesSlice.js';
+import './list/list-view.js';
+import './list/card-view.js';
+import {i18nStore} from '../store/i18n-store.js';
 
 export class EmployeeListing extends LitElement {
   static get properties() {
@@ -17,6 +20,18 @@ export class EmployeeListing extends LitElement {
         display: block;
       }
 
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px 0;
+      }
+
+      .page-title {
+        color: #ff6101;
+        margin: 0;
+      }
+
       .content {
         margin-top: 20px;
       }
@@ -25,7 +40,20 @@ export class EmployeeListing extends LitElement {
 
   constructor() {
     super();
-    this.selectedTab = 0; // 0 = list view, 1 = card view
+    this.selectedTab = 1; // 0 = list view, 1 = card view
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    // Subscribe to language changes
+    this.unsubscribe = i18nStore.subscribe(() => this.requestUpdate());
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    if (this.unsubscribe) {
+      this.unsubscribe();
+    }
   }
 
   _handleTabChanged(event) {
@@ -41,20 +69,21 @@ export class EmployeeListing extends LitElement {
 
   render() {
     return html`
-      <base-layout title="Employee List">
-        <div
-          style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;"
-        >
-          <h1 style="margin: 0; color: #ff6101;">Employee List</h1>
+      <base-layout title="${i18nStore.translate('employee.list.title')}">
+        <div class="header">
+          <h1 class="page-title">
+            ${i18nStore.translate('employee.list.title')}
+          </h1>
           <tabs-component
+            .activeTab=${this.selectedTab}
             @tab-changed="${this._handleTabChanged}"
           ></tabs-component>
         </div>
 
         <div class="content">
           ${this.selectedTab === 0
-            ? html`<p>List View Content</p>`
-            : html`<p>Card View Content</p>`}
+            ? html`<list-view></list-view>`
+            : html`<card-view></card-view>`}
         </div>
       </base-layout>
     `;

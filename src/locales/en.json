@@ -25,7 +25,7 @@
       "department": "Department",
       "position": "Position",
       "hireDate": "Hire Date",
-      "salary": "Salary",
+      "birthDate": "Birth Date",
       "save": "Save",
       "cancel": "Cancel",
       "create": {
@@ -41,8 +41,10 @@
       "phone": "Phone",
       "department": "Department",
       "position": "Position",
-      "hireDate": "Hire Date",
-      "salary": "Salary",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "dateOfEmployment": "Hire Date",
+      "dateOfBirth": "Birth Date",
       "edit": "Edit",
       "delete": "Delete"
     }
