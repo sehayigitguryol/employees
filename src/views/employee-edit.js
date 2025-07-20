@@ -1,5 +1,5 @@
 import {LitElement, html, css} from 'lit';
-import './base-layout.js';
+import '../components/base-layout.js';
 import {store} from '../store/ReduxProvider.js';
 import {selectEmployeeById} from '../store/employeesSlice.js';
 

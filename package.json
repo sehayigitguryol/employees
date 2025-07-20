@@ -39,11 +39,13 @@
   "author": "Google LLC",
   "license": "BSD-3-Clause",
   "dependencies": {
+    "@iconify/iconify": "3.1.1",
     "@reduxjs/toolkit": "2.8.2",
     "@vaadin/router": "2.0.0",
     "date-fns": "4.1.0",
     "i18next": "25.3.2",
     "i18next-browser-languagedetector": "8.2.0",
+    "iconify-icon": "3.0.0",
     "lit": "^3.2.0",
     "localforage": "1.10.0",
     "uuid": "11.1.0"

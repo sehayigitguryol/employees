@@ -1,8 +1,8 @@
 import {Router} from '@vaadin/router';
-import './components/employee-listing.js';
-import './components/employee-create.js';
-import './components/employee-edit.js';
-import './components/not-found.js';
+import './views/employee-listing.js';
+import './views/employee-create.js';
+import './views/employee-edit.js';
+import './views/not-found.js';
 import './store/index.js';
 import './store/init.js';
 

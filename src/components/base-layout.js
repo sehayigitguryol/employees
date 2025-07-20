@@ -1,13 +1,6 @@
 import {LitElement, html, css} from 'lit';
 
 export class BaseLayout extends LitElement {
-  static get properties() {
-    return {
-      title: {type: String},
-      actions: {type: Array},
-    };
-  }
-
   static get styles() {
     return css`
       :host {
@@ -102,9 +95,6 @@ export class BaseLayout extends LitElement {
         </nav>
       </header>
       <main class="main">
-        <div>
-          <h2>${this.title}</h2>
-        </div>
         <slot></slot>
       </main>
     `;

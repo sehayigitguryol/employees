@@ -1,5 +1,5 @@
 import {LitElement, html, css} from 'lit';
-import './base-layout.js';
+import '../components/base-layout.js';
 
 export class EmployeeCreate extends LitElement {
   static get styles() {
