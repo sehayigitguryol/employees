@@ -1,4 +1,6 @@
 import {LitElement, html, css} from 'lit';
+import './language-switcher.js';
+import {i18nStore} from '../store/i18n-store.js';
 
 export class BaseLayout extends LitElement {
   static get styles() {
@@ -84,14 +86,31 @@ export class BaseLayout extends LitElement {
     `;
   }
 
+  constructor() {
+    super();
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    // Subscribe to language changes
+    this.unsubscribe = i18nStore.subscribe(() => this.requestUpdate());
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    if (this.unsubscribe) {
+      this.unsubscribe();
+    }
+  }
+
   render() {
     return html`
       <header class="header">
-        <div>Employee Management</div>
+        <div>${i18nStore.translate('employee.list.title')}</div>
         <nav class="nav">
-          <a href="/">Employees</a>
-          <a href="/create">Add New</a>
-          <div>Language</div>
+          <a href="/">${i18nStore.translate('employee.list.title')}</a>
+          <a href="/create">${i18nStore.translate('employee.create.title')}</a>
+          <language-switcher></language-switcher>
         </nav>
       </header>
       <main class="main">

@@ -60,14 +60,8 @@ const sampleEmployees = [
   },
 ];
 
-// Initialize the store with sample data
 export function initializeStore() {
-  // Set initial employees data
   store.dispatch(setEmployees(sampleEmployees));
-
-  console.log('Redux store initialized with sample employee data');
-  console.log('Store state:', store.getState());
 }
 
-// Auto-initialize when this module is imported
 initializeStore();

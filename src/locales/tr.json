@@ -1,0 +1,97 @@
+{
+  "nav": {
+    "employees": "Çalışanlar",
+    "create": "Çalışan Oluştur",
+    "edit": "Çalışan Düzenle"
+  },
+  "employee": {
+    "list": {
+      "title": "Çalışan Listesi",
+      "create": "Çalışan Oluştur",
+      "search": "Çalışan ara...",
+      "view": {
+        "list": "Liste Görünümü",
+        "cards": "Kart Görünümü"
+      }
+    },
+    "create": {
+      "title": "Çalışan Oluştur",
+      "description": "Bu sayfa ile yeni bir çalışan oluşturabilirsiniz."
+    },
+    "form": {
+      "name": "Ad",
+      "email": "E-posta",
+      "phone": "Telefon",
+      "department": "Departman",
+      "position": "Pozisyon",
+      "hireDate": "İşe Alım Tarihi",
+      "salary": "Maaş",
+      "save": "Kaydet",
+      "cancel": "İptal",
+      "create": {
+        "title": "Yeni Çalışan Oluştur"
+      },
+      "edit": {
+        "title": "Çalışan Düzenle"
+      }
+    },
+    "details": {
+      "name": "Ad",
+      "email": "E-posta",
+      "phone": "Telefon",
+      "department": "Departman",
+      "position": "Pozisyon",
+      "hireDate": "İşe Alım Tarihi",
+      "salary": "Maaş",
+      "edit": "Düzenle",
+      "delete": "Sil"
+    }
+  },
+  "actions": {
+    "edit": "Düzenle",
+    "delete": "Sil",
+    "view": "Görüntüle",
+    "save": "Kaydet",
+    "cancel": "İptal",
+    "back": "Geri"
+  },
+  "message": {
+    "employee": {
+      "created": "Çalışan başarıyla oluşturuldu",
+      "updated": "Çalışan başarıyla güncellendi",
+      "deleted": "Çalışan başarıyla silindi"
+    },
+    "confirm": {
+      "delete": "Bu çalışanı silmek istediğinizden emin misiniz?"
+    },
+    "no": {
+      "employees": "Çalışan bulunamadı"
+    },
+    "loading": "Yükleniyor..."
+  },
+  "error": {
+    "loading": "Çalışanlar yüklenirken hata oluştu",
+    "saving": "Çalışan kaydedilirken hata oluştu",
+    "deleting": "Çalışan silinirken hata oluştu",
+    "not": {
+      "found": "Çalışan bulunamadı"
+    }
+  },
+  "pagination": {
+    "previous": "Önceki",
+    "next": "Sonraki",
+    "page": "Sayfa",
+    "of": "/"
+  },
+  "not": {
+    "found": {
+      "title": "Sayfa Bulunamadı",
+      "message": "Aradığınız sayfa mevcut değil.",
+      "back": "Ana Sayfaya Dön"
+    }
+  },
+  "language": {
+    "en": "English",
+    "tr": "Türkçe"
+  }
+}

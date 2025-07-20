@@ -1,5 +1,6 @@
 import {LitElement, html, css} from 'lit';
 import '../components/base-layout.js';
+import {t} from '../i18n.js';
 
 export class EmployeeCreate extends LitElement {
   static get styles() {
@@ -12,8 +13,8 @@ export class EmployeeCreate extends LitElement {
 
   render() {
     return html`
-      <base-layout title="Employee Create Page">
-        <p>This is the employee create page</p>
+      <base-layout title="${t('employee.create.title')}">
+        <p>${t('employee.create.description')}</p>
       </base-layout>
     `;
   }

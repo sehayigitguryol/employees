@@ -1,5 +1,6 @@
 import {LitElement, html, css} from 'lit';
 import 'iconify-icon';
+import {i18nStore} from '../store/i18n-store.js';
 
 export class Tabs extends LitElement {
   static get properties() {
@@ -52,6 +53,19 @@ export class Tabs extends LitElement {
     this.activeTab = 0;
   }
 
+  connectedCallback() {
+    super.connectedCallback();
+    // Subscribe to language changes
+    this.unsubscribe = i18nStore.subscribe(() => this.requestUpdate());
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    if (this.unsubscribe) {
+      this.unsubscribe();
+    }
+  }
+
   _handleClick(index) {
     this.activeTab = index;
     this.dispatchEvent(
@@ -67,7 +81,7 @@ export class Tabs extends LitElement {
       <button
         class="${this.activeTab === 0 ? 'active' : ''}"
         @click="${() => this._handleClick(0)}"
-        title="List View"
+        title="${i18nStore.translate('employee.list.view.list')}"
       >
         <iconify-icon
           icon="mdi:format-list-bulleted"
@@ -78,7 +92,7 @@ export class Tabs extends LitElement {
       <button
         class="${this.activeTab === 1 ? 'active' : ''}"
         @click="${() => this._handleClick(1)}"
-        title="Card View"
+        title="${i18nStore.translate('employee.list.view.cards')}"
       >
         <iconify-icon
           icon="mdi:view-grid"
