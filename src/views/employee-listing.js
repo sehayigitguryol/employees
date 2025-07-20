@@ -40,7 +40,7 @@ export class EmployeeListing extends LitElement {
 
   constructor() {
     super();
-    this.selectedTab = 1; // 0 = list view, 1 = card view
+    this.selectedTab = 0; // 0 = list view, 1 = card view
   }
 
   connectedCallback() {
@@ -58,10 +58,9 @@ export class EmployeeListing extends LitElement {
 
   _handleTabChanged(event) {
     this.selectedTab = event.detail.activeTab;
-    console.log('Selected tab:', this.selectedTab);
 
     // Reset page to 1 when view changes
-    store.dispatch(setSize(this.selectedTab === 0 ? 10 : 12));
+    store.dispatch(setSize(this.selectedTab === 0 ? 10 : 6));
     store.dispatch(setPage(1));
 
     this.requestUpdate(); // Force re-render

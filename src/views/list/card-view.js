@@ -7,6 +7,7 @@ import {
 } from '../../store/employeesSlice.js';
 import {i18nStore} from '../../store/i18n-store.js';
 import '../../components/employee-card.js';
+import '../../components/pagination.js';
 
 export class CardView extends LitElement {
   static get properties() {
@@ -132,6 +133,7 @@ export class CardView extends LitElement {
           `
         )}
       </div>
+      <app-pagination></app-pagination>
     `;
   }
 }
