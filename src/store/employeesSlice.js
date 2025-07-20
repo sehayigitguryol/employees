@@ -114,7 +114,7 @@ export const selectSize = (state) => state.employees.filters.size;
 export const selectSearchText = (state) => state.employees.filters.searchText;
 export const selectLoading = (state) => state.employees.loading;
 export const selectError = (state) => state.employees.error;
-export const selectTotal = (state) => state.employees.employees.length;
+export const selectTotal = (state) => selectFilteredEmployees(state).length;
 export const selectForm = (state) => state.employees.form;
 
 // Filtered employees selector
@@ -126,8 +126,10 @@ export const selectFilteredEmployees = (state) => {
     return employees;
   }
 
-  return employees.filter((employee) =>
-    employee.name?.toLowerCase().includes(searchText.toLowerCase())
+  return employees.filter(
+    (employee) =>
+      employee.firstName?.toLowerCase().includes(searchText.toLowerCase()) ||
+      employee.lastName?.toLowerCase().includes(searchText.toLowerCase())
   );
 };
 

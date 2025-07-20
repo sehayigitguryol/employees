@@ -1,6 +1,6 @@
 import {LitElement, html, css} from 'lit';
 import {store} from '../store/index.js';
-import {setPage} from '../store/employeesSlice.js';
+import {setPage, selectFilteredEmployees} from '../store/employeesSlice.js';
 
 export class Pagination extends LitElement {
   static properties = {
@@ -70,7 +70,7 @@ export class Pagination extends LitElement {
       const state = store.getState();
       this.page = state.employees.filters.page;
       this.size = state.employees.filters.size;
-      this.total = state.employees.employees.length;
+      this.total = selectFilteredEmployees(state).length;
       this.requestUpdate();
     });
 
@@ -78,7 +78,7 @@ export class Pagination extends LitElement {
     const initialState = store.getState();
     this.page = initialState.employees.filters.page;
     this.size = initialState.employees.filters.size;
-    this.total = initialState.employees.employees.length;
+    this.total = selectFilteredEmployees(initialState).length;
   }
 
   disconnectedCallback() {

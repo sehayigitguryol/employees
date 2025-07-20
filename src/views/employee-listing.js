@@ -1,8 +1,9 @@
 import {LitElement, html, css} from 'lit';
 import '../components/base-layout.js';
 import '../components/tabs.js';
+import '../components/input-field.js';
 import {store} from '../store/index.js';
-import {setPage, setSize} from '../store/employeesSlice.js';
+import {setPage, setSize, setSearchText} from '../store/employeesSlice.js';
 import './list/list-view.js';
 import './list/card-view.js';
 import {i18nStore} from '../store/i18n-store.js';
@@ -11,6 +12,7 @@ export class EmployeeListing extends LitElement {
   static get properties() {
     return {
       selectedTab: {type: Number},
+      searchValue: {type: String},
     };
   }
 
@@ -35,12 +37,23 @@ export class EmployeeListing extends LitElement {
       .content {
         margin-top: 20px;
       }
+
+      .side-section {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+
+      .search-container {
+        min-width: 250px;
+      }
     `;
   }
 
   constructor() {
     super();
     this.selectedTab = 0; // 0 = list view, 1 = card view
+    this.searchValue = '';
   }
 
   connectedCallback() {
@@ -66,6 +79,12 @@ export class EmployeeListing extends LitElement {
     this.requestUpdate(); // Force re-render
   }
 
+  _handleSearchChange(event) {
+    this.searchValue = event.detail.value;
+    store.dispatch(setSearchText(this.searchValue));
+    store.dispatch(setPage(1)); // Reset to first page when searching
+  }
+
   render() {
     return html`
       <base-layout title="${i18nStore.translate('employee.list.title')}">
@@ -73,10 +92,20 @@ export class EmployeeListing extends LitElement {
           <h1 class="page-title">
             ${i18nStore.translate('employee.list.title')}
           </h1>
-          <tabs-component
-            .activeTab=${this.selectedTab}
-            @tab-changed="${this._handleTabChanged}"
-          ></tabs-component>
+          <div class="side-section">
+            <div class="search-container">
+              <input-field
+                field="search"
+                .value="${this.searchValue}"
+                placeholder="${i18nStore.translate('employee.list.search')}"
+                @text-change="${this._handleSearchChange}"
+              ></input-field>
+            </div>
+            <tabs-component
+              .activeTab=${this.selectedTab}
+              @tab-changed="${this._handleTabChanged}"
+            ></tabs-component>
+          </div>
         </div>
 
         <div class="content">
