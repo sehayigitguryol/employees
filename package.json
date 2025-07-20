@@ -39,7 +39,13 @@
   "author": "Google LLC",
   "license": "BSD-3-Clause",
   "dependencies": {
-    "lit": "^3.2.0"
+    "@reduxjs/toolkit": "2.8.2",
+    "@vaadin/router": "2.0.0",
+    "date-fns": "4.1.0",
+    "i18next": "25.3.2",
+    "i18next-browser-languagedetector": "8.2.0",
+    "lit": "^3.2.0",
+    "localforage": "1.10.0"
   },
   "devDependencies": {
     "@11ty/eleventy": "^1.0.1",
@@ -50,6 +56,8 @@
     "@rollup/plugin-node-resolve": "^15.2.3",
     "@rollup/plugin-replace": "^5.0.7",
     "@rollup/plugin-terser": "^0.4.4",
+    "@types/i18next": "12.1.0",
+    "@types/localforage": "0.0.33",
     "@web/dev-server": "^0.1.31",
     "@web/dev-server-legacy": "^1.0.0",
     "@web/test-runner": "^0.15.0",

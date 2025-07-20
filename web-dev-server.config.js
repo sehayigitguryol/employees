@@ -4,22 +4,15 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-import {legacyPlugin} from '@web/dev-server-legacy';
-
-const mode = process.env.MODE || 'dev';
-if (!['dev', 'prod'].includes(mode)) {
-  throw new Error(`MODE must be "dev" or "prod", was "${mode}"`);
-}
+import {fromRollup} from '@web/dev-server-rollup';
+import nodeResolve from '@rollup/plugin-node-resolve';
 
 export default {
-  nodeResolve: {exportConditions: mode === 'dev' ? ['development'] : []},
+  nodeResolve: true,
   preserveSymlinks: true,
-  plugins: [
-    legacyPlugin({
-      polyfills: {
-        // Manually imported in index.html file
-        webcomponents: false,
-      },
-    }),
-  ],
+  plugins: [fromRollup(nodeResolve)],
+  // Add this configuration for SPA routing
+  appIndex: 'index.html',
+  // This tells the server to serve index.html for all routes
+  historyApiFallback: true,
 };
