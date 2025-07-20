@@ -1,7 +1,7 @@
 import {LitElement, html, css} from 'lit';
 import './base-layout.js';
 
-export class EmployeeForm extends LitElement {
+export class EmployeeCreate extends LitElement {
   static get styles() {
     return css`
       :host {
@@ -12,11 +12,11 @@ export class EmployeeForm extends LitElement {
 
   render() {
     return html`
-      <base-layout title="Employee Form Page">
-        <p>This is the employee form page</p>
+      <base-layout title="Employee Create Page">
+        <p>This is the employee create page</p>
       </base-layout>
     `;
   }
 }
 
-customElements.define('employee-form', EmployeeForm);
+customElements.define('employee-create', EmployeeCreate);

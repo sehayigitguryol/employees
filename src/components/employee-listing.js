@@ -12,8 +12,7 @@ export class EmployeeListing extends LitElement {
 
   render() {
     return html`
-      <base-layout>
-        <h1>Employee Listing Page</h1>
+      <base-layout title="Employee Listing Page">
         <p>This is the employee listing page</p>
       </base-layout>
     `;

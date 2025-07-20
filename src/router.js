@@ -1,6 +1,10 @@
 import {Router} from '@vaadin/router';
 import './components/employee-listing.js';
-import './components/employee-form.js';
+import './components/employee-create.js';
+import './components/employee-edit.js';
+import './components/not-found.js';
+import './store/index.js';
+import './store/init.js';
 
 const routes = [
   {
@@ -9,11 +13,19 @@ const routes = [
   },
   {
     path: '/create',
-    component: 'employee-form',
+    component: 'employee-create',
   },
   {
     path: '/edit/:id',
-    component: 'employee-form',
+    component: 'employee-edit',
+  },
+  {
+    path: '/404',
+    component: 'not-found',
+  },
+  {
+    path: '(.*)',
+    component: 'not-found',
   },
 ];
 
