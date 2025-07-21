@@ -20,26 +20,24 @@ export class IconButton extends LitElement {
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 40px;
-        height: 40px;
-        border: 2px solid #e0e0e0;
+        width: 28px;
+        height: 28px;
+        border: none;
         border-radius: 8px;
-        background: white;
+        background: none;
         cursor: pointer;
-        transition: all 0.2s ease;
+        transition: color 0.2s ease;
         color: #666;
       }
 
       .icon-button:hover {
-        border-color: #007bff;
         color: #007bff;
-        transform: translateY(-1px);
-        box-shadow: 0 2px 8px rgba(0, 123, 255, 0.2);
+        /* No border or background on hover */
       }
 
       iconify-icon {
-        width: 20px;
-        height: 20px;
+        width: 18px;
+        height: 18px;
       }
     `;
   }

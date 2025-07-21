@@ -6,11 +6,15 @@ export class BaseLayout extends LitElement {
   static get styles() {
     return css`
       :host {
-        display: block;
+        display: flex;
+        flex-direction: column;
         min-height: 100vh;
       }
 
       .header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
         background: #ff6101;
         color: white;
         padding: 1rem;
@@ -43,7 +47,8 @@ export class BaseLayout extends LitElement {
       .main {
         padding: 2rem;
         background-color: #f0f0f0;
-        min-height: calc(100vh - 80px);
+        flex: 1 1 auto;
+        min-height: 0;
         box-sizing: border-box;
       }
 

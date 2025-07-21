@@ -45,7 +45,8 @@
       "dateOfEmployment": "Date of Employment",
       "dateOfBirth": "Birth Date",
       "edit": "Edit",
-      "delete": "Delete"
+      "delete": "Delete",
+      "actions": "Actions"
     }
   },
   "actions": {

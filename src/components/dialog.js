@@ -57,30 +57,6 @@ export class Dialog extends LitElement {
       justify-content: flex-end;
     }
 
-    .btn {
-      padding: 10px 20px;
-      border: none;
-      border-radius: 6px;
-      font-size: 14px;
-      cursor: pointer;
-      min-width: 80px;
-    }
-
-    .btn-secondary {
-      background: #f5f5f5;
-      color: #333;
-    }
-
-    .btn-primary {
-      background: #007bff;
-      color: white;
-    }
-
-    .btn-primary:disabled {
-      background: #ccc;
-      cursor: not-allowed;
-    }
-
     @media (max-width: 480px) {
       .dialog-actions {
         flex-direction: column;
@@ -116,20 +92,20 @@ export class Dialog extends LitElement {
             : ''}
 
           <div class="dialog-actions">
-            <button
-              class="btn btn-secondary"
+            <app-button
+              variant="secondary"
               @click=${this._handleCancel}
               ?disabled=${this.loading}
             >
               ${this.cancelText}
-            </button>
-            <button
-              class="btn btn-primary"
+            </app-button>
+            <app-button
+              variant="primary"
               @click=${this._handleConfirm}
               ?disabled=${this.loading}
             >
               ${this.loading ? 'Loading...' : this.confirmText}
-            </button>
+            </app-button>
           </div>
         </div>
       </div>

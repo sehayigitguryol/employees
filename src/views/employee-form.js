@@ -4,6 +4,7 @@ import '../components/tabs.js';
 import '../components/input-field.js';
 import '../components/select-field.js';
 import '../components/dialog.js';
+import '../components/button.js';
 import {i18nStore} from '../store/i18n-store.js';
 import {store as importedStore} from '../store/ReduxProvider.js';
 import {
@@ -53,38 +54,6 @@ export class EmployeeForm extends LitElement {
       margin-top: 2rem;
       padding-top: 1.5rem;
       border-top: 1px solid #e0e0e0;
-    }
-
-    .btn {
-      padding: 0.75rem 1.5rem;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      font-size: 0.875rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .btn-primary {
-      background: #007bff;
-      color: white;
-      border-color: #007bff;
-    }
-
-    .btn-primary:hover {
-      background: #0056b3;
-      border-color: #0056b3;
-    }
-
-    .btn-secondary {
-      background: white;
-      color: #666;
-      border-color: #ddd;
-    }
-
-    .btn-secondary:hover {
-      background: #f8f8f8;
-      border-color: #999;
     }
 
     .validation-error {
@@ -228,6 +197,7 @@ export class EmployeeForm extends LitElement {
   }
 
   async _handleSubmit(e) {
+    console.log('🔧 Submitting form');
     e.preventDefault();
 
     // Validate the form
@@ -290,7 +260,6 @@ export class EmployeeForm extends LitElement {
   }
 
   _handleCancel() {
-    // Reset form and navigate back
     getStore().dispatch(resetForm());
     window.history.back();
   }
@@ -438,18 +407,28 @@ export class EmployeeForm extends LitElement {
             : ''}
 
           <div class="form-actions">
-            <button
+            <app-button
               type="button"
-              class="btn btn-secondary"
+              variant="secondary"
+              id="cancel-button"
               @click="${this._handleCancel}"
             >
+              <span slot="icon">
+                <iconify-icon icon="mdi:cancel" width="16"></iconify-icon>
+              </span>
               ${i18nStore.translate('actions.cancel')}
-            </button>
-            <button type="submit" class="btn btn-primary">
+            </app-button>
+            <app-button type="submit" variant="primary" id="save-button">
+              <span slot="icon">
+                <iconify-icon
+                  icon="${this.employee ? 'mdi:content-save' : 'mdi:plus'}"
+                  width="16"
+                ></iconify-icon>
+              </span>
               ${this.employee
                 ? i18nStore.translate('actions.save')
                 : i18nStore.translate('employee.list.create')}
-            </button>
+            </app-button>
           </div>
         </form>
       </div>

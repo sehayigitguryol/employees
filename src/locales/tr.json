@@ -45,7 +45,8 @@
       "dateOfEmployment": "İşe Alım Tarihi",
       "dateOfBirth": "Doğum Tarihi",
       "edit": "Düzenle",
-      "delete": "Sil"
+      "delete": "Sil",
+      "actions": "İşlemler"
     }
   },
   "actions": {

@@ -3,6 +3,7 @@ import {i18nStore} from '../store/i18n-store.js';
 import {store as importedStore} from '../store/index.js';
 import {removeEmployee} from '../store/employeesSlice.js';
 import 'iconify-icon';
+import './button.js';
 
 // Get store dynamically to use window.store for testing, fall back to imported store
 function getStore() {
@@ -56,51 +57,7 @@ export class EmployeeCard extends LitElement {
       gap: 0.5rem;
       justify-content: flex-start;
     }
-
-    .btn {
-      padding: 0.375rem 0.75rem;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      background: white;
-      color: #666;
-      font-size: 0.75rem;
-      font-weight: 400;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      display: flex;
-      align-items: center;
-      gap: 0.375rem;
-      white-space: nowrap;
-    }
-
-    .btn:hover {
-      border-color: #999;
-      color: #333;
-      background: #f8f8f8;
-    }
-
-    .btn.edit {
-      color: #1976d2;
-      border-color: #1976d2;
-    }
-
-    .btn.edit:hover {
-      background: #e3f2fd;
-      border-color: #1565c0;
-      color: #1565c0;
-    }
-
-    .btn.delete {
-      color: #d32f2f;
-      border-color: #d32f2f;
-    }
-
-    .btn.delete:hover {
-      background: #ffebee;
-      border-color: #c62828;
-      color: #c62828;
-    }
-
+    /* Removed .btn styles, now in app-button */
     /* Tablet styles */
     @media (max-width: 1024px) {
       .card {
@@ -117,11 +74,6 @@ export class EmployeeCard extends LitElement {
 
       .detail-value {
         font-size: 0.85rem;
-      }
-
-      .btn {
-        padding: 0.35rem 0.625rem;
-        font-size: 0.7rem;
       }
     }
 
@@ -148,12 +100,6 @@ export class EmployeeCard extends LitElement {
       .card-actions {
         gap: 0.5rem;
       }
-
-      .btn {
-        padding: 0.3rem 0.5rem;
-        font-size: 0.65rem;
-        gap: 0.25rem;
-      }
     }
 
     @media (max-width: 480px) {
@@ -178,12 +124,6 @@ export class EmployeeCard extends LitElement {
       .card-actions {
         gap: 0.375rem;
       }
-
-      .btn {
-        padding: 0.25rem 0.375rem;
-        font-size: 0.6rem;
-        gap: 0.2rem;
-      }
     }
 
     @media (min-width: 1200px) {
@@ -203,12 +143,6 @@ export class EmployeeCard extends LitElement {
 
       .detail-value {
         font-size: 1rem;
-      }
-
-      .btn {
-        padding: 0.5rem 1rem;
-        font-size: 0.8rem;
-        gap: 0.5rem;
       }
     }
   `;
@@ -324,18 +258,22 @@ export class EmployeeCard extends LitElement {
         </div>
 
         <div class="card-actions">
-          <button class="btn edit" @click="${this._handleEdit}">
-            <iconify-icon icon="mdi:pencil" width="16"></iconify-icon>
+          <app-button variant="primary" @click="${this._handleEdit}">
+            <span slot="icon">
+              <iconify-icon icon="mdi:pencil" width="16"></iconify-icon>
+            </span>
             ${i18nStore.translate('actions.edit')}
-          </button>
-          <button
-            class="btn delete"
+          </app-button>
+          <app-button
+            variant="secondary"
             id="delete-button"
             @click="${this._handleDelete}"
           >
-            <iconify-icon icon="mdi:delete" width="16"></iconify-icon>
+            <span slot="icon">
+              <iconify-icon icon="mdi:delete" width="16"></iconify-icon>
+            </span>
             ${i18nStore.translate('actions.delete')}
-          </button>
+          </app-button>
         </div>
       </div>
 
