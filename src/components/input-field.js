@@ -2,6 +2,7 @@ import {LitElement, html, css} from 'lit';
 
 export class InputField extends LitElement {
   static properties = {
+    id: {type: String},
     label: {type: String},
     field: {type: String},
     value: {type: String},
@@ -94,6 +95,7 @@ export class InputField extends LitElement {
             `
           : ''}
         <input
+          id=${this.id}
           type=${this.type || 'text'}
           class="field-input ${this.error ? 'error' : ''}"
           .value="${this.value}"

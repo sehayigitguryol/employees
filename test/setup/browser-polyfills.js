@@ -22,3 +22,24 @@ if (typeof window.Buffer === 'undefined') {
 if (typeof window.process.nextTick === 'undefined') {
   window.process.nextTick = (fn) => setTimeout(fn, 0);
 }
+
+// Mock router outlet for tests
+if (!document.getElementById('outlet')) {
+  const outlet = document.createElement('div');
+  outlet.id = 'outlet';
+  document.body.appendChild(outlet);
+}
+
+// Mock window.history for tests
+if (!window.history.pushState) {
+  window.history.pushState = () => {};
+}
+
+if (!window.history.back) {
+  window.history.back = () => {};
+}
+
+// Mock window.dispatchEvent for tests
+if (!window.dispatchEvent) {
+  window.dispatchEvent = () => {};
+}

@@ -39,18 +39,35 @@ const employeesSlice = createSlice({
       state.employees.push(newEmployee);
     },
     updateEmployee: (state, action) => {
+      console.log(
+        '🔧 updateEmployee reducer called with payload:',
+        action.payload
+      );
       const {id, ...updatedEmployee} = action.payload;
       const index = state.employees.findIndex((emp) => emp.id === id);
+      console.log('🔧 Found employee at index:', index);
       if (index !== -1) {
         state.employees[index] = {
           ...state.employees[index],
           ...updatedEmployee,
         };
+        console.log('🔧 Updated employee:', state.employees[index]);
       }
     },
     removeEmployee: (state, action) => {
+      console.log(
+        '🔧 removeEmployee reducer called with payload:',
+        action.payload
+      );
+      const originalLength = state.employees.length;
       state.employees = state.employees.filter(
         (emp) => emp.id !== action.payload
+      );
+      console.log(
+        '🔧 Removed employee. Original length:',
+        originalLength,
+        'New length:',
+        state.employees.length
       );
     },
     setFilters: (state, action) => {
@@ -79,7 +96,6 @@ const employeesSlice = createSlice({
       };
     },
     setForm: (state, action) => {
-      console.log('🔧 Setting form:', action.payload);
       state.form = action.payload || {...initialEmployeeForm};
     },
     resetForm: (state) => {

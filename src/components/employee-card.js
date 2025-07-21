@@ -1,8 +1,13 @@
 import {LitElement, html, css} from 'lit';
 import {i18nStore} from '../store/i18n-store.js';
-import {store} from '../store/index.js';
+import {store as importedStore} from '../store/index.js';
 import {removeEmployee} from '../store/employeesSlice.js';
 import 'iconify-icon';
+
+// Get store dynamically to use window.store for testing, fall back to imported store
+function getStore() {
+  return window.store || importedStore;
+}
 
 export class EmployeeCard extends LitElement {
   static properties = {
@@ -244,7 +249,8 @@ export class EmployeeCard extends LitElement {
 
   _handleConfirmDelete() {
     this.showConfirmDialog = false;
-    store.dispatch(removeEmployee(this.employee.id));
+    console.log('🔧 Deleting employee with ID:', this.employee.id);
+    getStore().dispatch(removeEmployee(this.employee.id));
   }
 
   render() {
@@ -322,7 +328,11 @@ export class EmployeeCard extends LitElement {
             <iconify-icon icon="mdi:pencil" width="16"></iconify-icon>
             ${i18nStore.translate('actions.edit')}
           </button>
-          <button class="btn delete" @click="${this._handleDelete}">
+          <button
+            class="btn delete"
+            id="delete-button"
+            @click="${this._handleDelete}"
+          >
             <iconify-icon icon="mdi:delete" width="16"></iconify-icon>
             ${i18nStore.translate('actions.delete')}
           </button>

@@ -2,6 +2,7 @@ import {LitElement, html, css} from 'lit';
 
 export class SelectField extends LitElement {
   static properties = {
+    id: {type: String},
     label: {type: String},
     field: {type: String},
     value: {type: String},
@@ -65,6 +66,7 @@ export class SelectField extends LitElement {
 
   constructor() {
     super();
+    this.id = '';
     this.label = '';
     this.field = '';
     this.value = '';
@@ -101,6 +103,7 @@ export class SelectField extends LitElement {
             `
           : ''}
         <select
+          id=${this.id}
           class="field-select ${this.error ? 'error' : ''}"
           .value="${this.value}"
           ?required="${this.required}"

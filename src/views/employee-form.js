@@ -5,7 +5,7 @@ import '../components/input-field.js';
 import '../components/select-field.js';
 import '../components/dialog.js';
 import {i18nStore} from '../store/i18n-store.js';
-import {store} from '../store/ReduxProvider.js';
+import {store as importedStore} from '../store/ReduxProvider.js';
 import {
   setForm,
   resetForm,
@@ -14,7 +14,11 @@ import {
   updateEmployee,
 } from '../store/employeesSlice.js';
 import {validateEmployeeForm} from '../utils/validation.js';
-import router from '../router.js';
+
+// Get store dynamically to use window.store for testing, fall back to imported store
+function getStore() {
+  return window.store || importedStore;
+}
 
 export class EmployeeForm extends LitElement {
   static properties = {
@@ -146,27 +150,31 @@ export class EmployeeForm extends LitElement {
   }
 
   _initializeForm() {
+    console.log('🔧 Initializing form with employee:', this.employee);
     // Dispatch the appropriate action based on whether we're editing or creating
     if (this.employee) {
-      store.dispatch(setForm(this.employee));
+      getStore().dispatch(setForm(this.employee));
       this.isCreate = false;
+      console.log('🔧 Form set to edit mode');
     } else {
-      store.dispatch(resetForm());
+      getStore().dispatch(resetForm());
       this.isCreate = true;
+      console.log('🔧 Form set to create mode');
     }
 
     // Get state after dispatching
-    const newState = store.getState();
+    const newState = getStore().getState();
 
     // Subscribe to form changes
-    this._unsubscribe = store.subscribe(() => {
-      const state = store.getState();
+    this._unsubscribe = getStore().subscribe(() => {
+      const state = getStore().getState();
       this.formData = selectForm(state);
       this.requestUpdate();
     });
 
     // Set initial form data immediately
     this.formData = selectForm(newState);
+    console.log('🔧 Initial form data:', this.formData);
   }
 
   disconnectedCallback() {
@@ -197,7 +205,9 @@ export class EmployeeForm extends LitElement {
         [field]: value,
       };
 
-      store.dispatch(setForm(updatedForm));
+      console.log('🔧 Updating form field:', field, 'to:', value);
+      console.log('🔧 Updated form data:', updatedForm);
+      getStore().dispatch(setForm(updatedForm));
     }
   }
 
@@ -248,19 +258,28 @@ export class EmployeeForm extends LitElement {
       // Set loading state
       this.shadowRoot.getElementById('confirmDialog').setLoading(true);
 
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      // Simulate API call - remove the timeout for testing
+      // await new Promise((resolve) => setTimeout(resolve, 1000));
 
+      console.log('🔧 Dispatching addEmployee with formData:', this.formData);
+      console.log(
+        '🔧 Using store:',
+        getStore() === window.store ? 'window.store' : 'importedStore'
+      );
+      console.log('🔧 Form isCreate:', this.isCreate);
+      console.log('🔧 Form employee:', this.employee);
       if (this.isCreate) {
-        store.dispatch(addEmployee(this.formData));
+        console.log('🔧 Creating new employee');
+        getStore().dispatch(addEmployee(this.formData));
       } else {
-        store.dispatch(updateEmployee(this.formData));
+        console.log('🔧 Updating existing employee');
+        getStore().dispatch(updateEmployee(this.formData));
       }
 
       // Show success message or redirect
 
       // Reset form and navigate to employee list
-      store.dispatch(resetForm());
+      getStore().dispatch(resetForm());
       window.history.pushState(null, '', '/');
       window.dispatchEvent(new PopStateEvent('popstate'));
     } catch (error) {
@@ -272,7 +291,7 @@ export class EmployeeForm extends LitElement {
 
   _handleCancel() {
     // Reset form and navigate back
-    store.dispatch(resetForm());
+    getStore().dispatch(resetForm());
     window.history.back();
   }
 
@@ -289,6 +308,7 @@ export class EmployeeForm extends LitElement {
         <form @submit="${this._handleSubmit}">
           <div class="form-fields">
             <input-field
+              id="firstName"
               label="${i18nStore.translate('employee.details.firstName')}"
               field="firstName"
               .value="${this.formData.firstName || ''}"
@@ -299,6 +319,7 @@ export class EmployeeForm extends LitElement {
             >
             </input-field>
             <input-field
+              id="lastName"
               label="${i18nStore.translate('employee.details.lastName')}"
               field="lastName"
               .value="${this.formData.lastName || ''}"
@@ -310,6 +331,7 @@ export class EmployeeForm extends LitElement {
             </input-field>
 
             <input-field
+              id="dateOfBirth"
               label="${i18nStore.translate('employee.details.dateOfBirth')}"
               field="dateOfBirth"
               .value="${this.formData.dateOfBirth || ''}"
@@ -324,6 +346,7 @@ export class EmployeeForm extends LitElement {
             </input-field>
 
             <input-field
+              id="email"
               label="${i18nStore.translate('employee.details.email')}"
               field="email"
               .value="${this.formData.email || ''}"
@@ -336,6 +359,7 @@ export class EmployeeForm extends LitElement {
             </input-field>
 
             <input-field
+              id="phone"
               label="${i18nStore.translate('employee.details.phone')}"
               field="phone"
               .value="${this.formData.phone || ''}"
@@ -347,6 +371,7 @@ export class EmployeeForm extends LitElement {
             >
             </input-field>
             <input-field
+              id="dateOfEmployment"
               label="${i18nStore.translate(
                 'employee.details.dateOfEmployment'
               )}"
@@ -362,6 +387,7 @@ export class EmployeeForm extends LitElement {
             >
             </input-field>
             <select-field
+              id="department"
               label="${i18nStore.translate('employee.details.department')}"
               field="department"
               .value="${this.formData.department || ''}"
@@ -376,6 +402,7 @@ export class EmployeeForm extends LitElement {
             </select-field>
 
             <select-field
+              id="position"
               label="${i18nStore.translate('employee.details.position')}"
               field="position"
               .value="${this.formData.position || ''}"

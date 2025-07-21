@@ -2,11 +2,16 @@ import {LitElement, html, css} from 'lit';
 import '../components/base-layout.js';
 import '../components/tabs.js';
 import '../components/input-field.js';
-import {store} from '../store/index.js';
+import {store as importedStore} from '../store/index.js';
 import {setPage, setSize, setSearchText} from '../store/employeesSlice.js';
 import './list/list-view.js';
 import './list/card-view.js';
 import {i18nStore} from '../store/i18n-store.js';
+
+// Get store dynamically to use window.store for testing, fall back to imported store
+function getStore() {
+  return window.store || importedStore;
+}
 
 export class EmployeeListing extends LitElement {
   static get properties() {
@@ -73,16 +78,16 @@ export class EmployeeListing extends LitElement {
     this.selectedTab = event.detail.activeTab;
 
     // Reset page to 1 when view changes
-    store.dispatch(setSize(this.selectedTab === 0 ? 10 : 6));
-    store.dispatch(setPage(1));
+    getStore().dispatch(setSize(this.selectedTab === 0 ? 10 : 6));
+    getStore().dispatch(setPage(1));
 
     this.requestUpdate(); // Force re-render
   }
 
   _handleSearchChange(event) {
     this.searchValue = event.detail.value;
-    store.dispatch(setSearchText(this.searchValue));
-    store.dispatch(setPage(1)); // Reset to first page when searching
+    getStore().dispatch(setSearchText(this.searchValue));
+    getStore().dispatch(setPage(1)); // Reset to first page when searching
   }
 
   render() {
@@ -95,6 +100,7 @@ export class EmployeeListing extends LitElement {
           <div class="side-section">
             <div class="search-container">
               <input-field
+                id="search"
                 field="search"
                 .value="${this.searchValue}"
                 placeholder="${i18nStore.translate('employee.list.search')}"

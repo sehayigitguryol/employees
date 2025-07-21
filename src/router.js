@@ -32,10 +32,13 @@ const routes = [
 const router = new Router();
 router.setRoutes(routes);
 
-// Initialize the router
-router.setOutlet(document.getElementById('outlet'));
+// Only initialize router and store if we're not in a test environment
+if (typeof window !== 'undefined' && window.process?.env?.NODE_ENV !== 'test') {
+  // Initialize the router
+  router.setOutlet(document.getElementById('outlet'));
 
-// Initialize store only once when app starts
-initializeStore();
+  // Initialize store only once when app starts
+  initializeStore();
+}
 
 export default router;

@@ -1,5 +1,5 @@
 import {LitElement, html, css} from 'lit';
-import {store} from '../../store/index.js';
+import {store as importedStore} from '../../store/index.js';
 import {
   selectPaginatedEmployees,
   selectLoading,
@@ -8,6 +8,11 @@ import {
 import {i18nStore} from '../../store/i18n-store.js';
 import '../../components/employee-card.js';
 import '../../components/pagination.js';
+
+// Get store dynamically to use window.store for testing, fall back to imported store
+function getStore() {
+  return window.store || importedStore;
+}
 
 export class CardView extends LitElement {
   static get properties() {
@@ -76,7 +81,7 @@ export class CardView extends LitElement {
     super.connectedCallback();
 
     // Get initial state immediately
-    const initialState = store.getState();
+    const initialState = getStore().getState();
     this.employees = selectPaginatedEmployees(initialState);
     this.loading = selectLoading(initialState);
     this.error = selectError(initialState);
@@ -85,8 +90,8 @@ export class CardView extends LitElement {
     this.requestUpdate();
 
     // Subscribe to store changes
-    this.unsubscribe = store.subscribe(() => {
-      const state = store.getState();
+    this.unsubscribe = getStore().subscribe(() => {
+      const state = getStore().getState();
       this.employees = selectPaginatedEmployees(state);
       this.loading = selectLoading(state);
       this.error = selectError(state);
