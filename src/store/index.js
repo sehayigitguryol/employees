@@ -6,5 +6,4 @@ export const store = configureStore({
     employees: employeesReducer,
   },
 });
-
 export default store;

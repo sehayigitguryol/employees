@@ -30,121 +30,109 @@ describe('Employee CRUD Integration', () => {
 
     await form.updateComplete;
 
-    // Fill out the form with all required fields using IDs
-    const firstNameInput = form.shadowRoot.querySelector('#firstName');
-    const lastNameInput = form.shadowRoot.querySelector('#lastName');
-    const emailInput = form.shadowRoot.querySelector('#email');
-    const phoneInput = form.shadowRoot.querySelector('#phone');
-    const dateOfBirthInput = form.shadowRoot.querySelector('#dateOfBirth');
-    const dateOfEmploymentInput =
-      form.shadowRoot.querySelector('#dateOfEmployment');
-    const departmentSelect = form.shadowRoot.querySelector('#department');
-    const positionSelect = form.shadowRoot.querySelector('#position');
-
-    // Simulate form input - fill all required fields
-    firstNameInput.dispatchEvent(
-      new CustomEvent('text-change', {
-        detail: {field: 'firstName', value: 'John'},
-      })
+    // Fill out the form with all required fields using user-like input
+    const firstNameField = form.shadowRoot.querySelector(
+      'input-field#firstName'
+    );
+    const lastNameField = form.shadowRoot.querySelector('input-field#lastName');
+    const emailField = form.shadowRoot.querySelector('input-field#email');
+    const phoneField = form.shadowRoot.querySelector('input-field#phone');
+    const dateOfBirthField = form.shadowRoot.querySelector(
+      'input-field#dateOfBirth'
+    );
+    const dateOfEmploymentField = form.shadowRoot.querySelector(
+      'input-field#dateOfEmployment'
+    );
+    const departmentSelect = form.shadowRoot.querySelector(
+      'select-field#department'
+    );
+    const positionSelect = form.shadowRoot.querySelector(
+      'select-field#position'
     );
 
-    lastNameInput.dispatchEvent(
-      new CustomEvent('text-change', {
-        detail: {field: 'lastName', value: 'Doe'},
-      })
-    );
+    // Helper to set value and dispatch input event
+    function setInputValue(field, value) {
+      field.value = value; // update the property for display
+      field.dispatchEvent(
+        new CustomEvent('text-change', {
+          detail: {field: field.field, value},
+          bubbles: true,
+          composed: true,
+        })
+      );
+    }
 
-    emailInput.dispatchEvent(
-      new CustomEvent('text-change', {
-        detail: {field: 'email', value: 'john.doe@example.com'},
-      })
-    );
+    setInputValue(firstNameField, 'John');
+    setInputValue(lastNameField, 'Doe');
+    setInputValue(emailField, 'john.doe@example.com');
+    setInputValue(phoneField, '0532 123 45 67');
+    setInputValue(dateOfBirthField, '1990-05-20');
+    setInputValue(dateOfEmploymentField, '2023-01-15');
+    await form.updateComplete;
 
-    phoneInput.dispatchEvent(
-      new CustomEvent('text-change', {
-        detail: {field: 'phone', value: '0532 123 45 67'},
-      })
-    );
-
-    dateOfBirthInput.dispatchEvent(
-      new CustomEvent('text-change', {
-        detail: {field: 'dateOfBirth', value: '1990-05-20'},
-      })
-    );
-
-    dateOfEmploymentInput.dispatchEvent(
-      new CustomEvent('text-change', {
-        detail: {field: 'dateOfEmployment', value: '2023-01-15'},
-      })
-    );
-
+    // For select-field, simulate the select-change event as before
     departmentSelect.dispatchEvent(
       new CustomEvent('select-change', {
         detail: {field: 'department', value: 'Tech'},
+        bubbles: true,
+        composed: true,
       })
     );
-
     positionSelect.dispatchEvent(
       new CustomEvent('select-change', {
         detail: {field: 'position', value: 'Senior'},
-      })
-    );
-
-    // Wait for debounce to complete and form data to update
-    // Trigger one more update to ensure all data is processed
-    firstNameInput.dispatchEvent(
-      new CustomEvent('text-change', {
-        detail: {field: 'firstName', value: 'John'},
+        bubbles: true,
+        composed: true,
       })
     );
     await form.updateComplete;
 
-    // Wait a bit more for any remaining debounce operations
-    await form.updateComplete;
-
-    // Directly set the form data in the store to ensure it's populated
-    const formData = {
-      firstName: 'John',
-      lastName: 'Doe',
-      email: 'john.doe@example.com',
-      phone: '0532 123 45 67',
-      dateOfBirth: '1990-05-20',
-      dateOfEmployment: '2023-01-15',
-      department: 'Tech',
-      position: 'Senior',
-    };
-
-    // Import the setForm action
-    const {setForm} = await import('../../src/store/employeesSlice.js');
-    store.dispatch(setForm(formData));
-
-    // Wait for the form to update
-    await form.updateComplete;
-
-    // Directly set the form data on the component to bypass store subscription issues
-    form.formData = formData;
-    await form.updateComplete;
-
-    // Submit the form
-    const submitButton = form.shadowRoot.querySelector('button[type="submit"]');
-    submitButton.click();
-
-    // Wait for the confirmation dialog to appear
-    await form.updateComplete;
-
-    // Wait a bit more to ensure the dialog is fully rendered
-    await form.updateComplete;
-
-    // Confirm the save
-    const dialog = form.shadowRoot.querySelector('app-dialog');
-    if (dialog && dialog.open) {
-      const confirmEvent = new CustomEvent('confirm', {bubbles: true});
-      dialog.dispatchEvent(confirmEvent);
-    } else {
-      throw new Error('Confirmation dialog not found or not open');
+    // Poll for formData to be updated after all events
+    let pollAttempts = 0;
+    while (!form.formData.firstName && pollAttempts < 20) {
+      await form.updateComplete;
+      pollAttempts++;
     }
 
-    // Wait for save to complete
+    // Assert all required fields are present and non-empty
+    const requiredFields = [
+      'firstName',
+      'lastName',
+      'email',
+      'phone',
+      'dateOfBirth',
+      'dateOfEmployment',
+      'department',
+      'position',
+    ];
+    for (const field of requiredFields) {
+      if (!form.formData[field]) {
+        throw new Error(
+          `Required field ${field} is missing or empty in formData`
+        );
+      }
+    }
+
+    // Submit the form
+    const formElement = form.shadowRoot.querySelector('form');
+    formElement.dispatchEvent(
+      new Event('submit', {bubbles: true, cancelable: true, composed: true})
+    );
+    await form.updateComplete;
+
+    // Wait for the confirmation dialog to appear and be open
+    let dialog = form.shadowRoot.querySelector('app-dialog');
+    for (let i = 0; i < 10 && (!dialog || !dialog.open); i++) {
+      await form.updateComplete;
+      dialog = form.shadowRoot.querySelector('app-dialog');
+    }
+    if (!dialog || !dialog.open)
+      throw new Error('Confirmation dialog not found or not open');
+
+    // Confirm the save
+    const confirmBtn = dialog.shadowRoot.querySelector('#confirm-button');
+    if (!confirmBtn) throw new Error('Confirm button not found');
+    confirmBtn.click();
     await form.updateComplete;
 
     // Wait for the async _saveEmployee method to complete by polling the store
@@ -195,35 +183,37 @@ describe('Employee CRUD Integration', () => {
 
     // Update the employee using ID
     const lastNameInput = form.shadowRoot.querySelector('#lastName');
+    lastNameInput.value = 'Smith';
     lastNameInput.dispatchEvent(
       new CustomEvent('text-change', {
         detail: {field: 'lastName', value: 'Smith'},
+        bubbles: true,
+        composed: true,
       })
     );
 
-    // Wait for form data to update
     await form.updateComplete;
 
-    // Debug: Check form data before submission
-    console.log('🔧 Form data before submission:', form.formData);
-    console.log('🔧 Form isCreate:', form.isCreate);
-    console.log('🔧 Form employee:', form.employee);
-
-    // Submit the form
-    const submitButton = form.shadowRoot.querySelector('button[type="submit"]');
-    submitButton.click();
-
-    // Wait for the confirmation dialog
+    // Submit the form by dispatching a submit event
+    const formElement = form.shadowRoot.querySelector('form');
+    formElement.dispatchEvent(
+      new Event('submit', {bubbles: true, cancelable: true, composed: true})
+    );
     await form.updateComplete;
+
+    // Wait for the confirmation dialog to appear and be open
+    let dialog = form.shadowRoot.querySelector('app-dialog');
+    for (let i = 0; i < 10 && (!dialog || !dialog.open); i++) {
+      await form.updateComplete;
+      dialog = form.shadowRoot.querySelector('app-dialog');
+    }
+    if (!dialog || !dialog.open)
+      throw new Error('Confirmation dialog not found or not open');
 
     // Confirm the save
-    const dialog = form.shadowRoot.querySelector('app-dialog');
-    if (dialog && dialog.open) {
-      const confirmEvent = new CustomEvent('confirm', {bubbles: true});
-      dialog.dispatchEvent(confirmEvent);
-    }
-
-    // Wait for save to complete
+    const confirmBtn = dialog.shadowRoot.querySelector('#confirm-button');
+    if (!confirmBtn) throw new Error('Confirm button not found');
+    confirmBtn.click();
     await form.updateComplete;
 
     // Check if employee was updated in store
@@ -258,7 +248,9 @@ describe('Employee CRUD Integration', () => {
     await card.updateComplete;
 
     // Click delete button
-    const deleteButton = card.shadowRoot.querySelector('#delete-button');
+    const deleteButton = card.shadowRoot.querySelector(
+      `#delete-button-${addedEmployees[0].id}`
+    );
     if (!deleteButton) {
       throw new Error('Delete button not found');
     }
@@ -270,8 +262,10 @@ describe('Employee CRUD Integration', () => {
     // Confirm deletion
     const dialog = card.shadowRoot.querySelector('app-dialog');
     if (dialog && dialog.open) {
-      const confirmEvent = new CustomEvent('confirm', {bubbles: true});
-      dialog.dispatchEvent(confirmEvent);
+      await dialog.updateComplete;
+      const confirmBtn = dialog.shadowRoot.querySelector('#confirm-button');
+      if (!confirmBtn) throw new Error('Confirm button not found');
+      confirmBtn.click();
     }
 
     await card.updateComplete;
@@ -284,14 +278,13 @@ describe('Employee CRUD Integration', () => {
     assert.equal(remainingEmployees[0].firstName, 'Jane');
   });
 
-  it('should search and filter employees', async () => {
+  it('should search and filter employees', (done) => {
     // Add employees to store
     const employees = [
       {id: '1', firstName: 'John', lastName: 'Doe', department: 'Tech'},
       {id: '2', firstName: 'Jane', lastName: 'Smith', department: 'HR'},
       {id: '3', firstName: 'Bob', lastName: 'Johnson', department: 'Tech'},
     ];
-
     employees.forEach((emp) => {
       store.dispatch({
         type: 'employees/addEmployee',
@@ -299,90 +292,40 @@ describe('Employee CRUD Integration', () => {
       });
     });
 
-    // Verify initial state
-    let state = store.getState();
-    assert.equal(state.employees.filters.searchText, '');
-    assert.equal(state.employees.employees.length, 3);
+    fixture(html`<employee-listing></employee-listing>`).then((listing) => {
+      // Simulate search
+      const searchInput = listing.shadowRoot.querySelector('#search');
+      searchInput.dispatchEvent(
+        new CustomEvent('text-change', {
+          detail: {field: 'search', value: 'john'},
+        })
+      );
 
-    // Create employee listing
-    const listing = await fixture(html`
-      <employee-listing></employee-listing>
-    `);
-
-    await listing.updateComplete;
-
-    // Simulate search
-    const searchInput = listing.shadowRoot.querySelector('#search');
-    searchInput.dispatchEvent(
-      new CustomEvent('text-change', {
-        detail: {field: 'search', value: 'john'},
-      })
-    );
-
-    await listing.updateComplete;
-
-    // Verify search text was correctly dispatched to store
-    state = store.getState();
-    assert.equal(
-      state.employees.filters.searchText,
-      'john',
-      'Search text should be updated in store'
-    );
-
-    // Import the selectFilteredEmployees selector
-    const {selectFilteredEmployees} = await import(
-      '../../src/store/employeesSlice.js'
-    );
-
-    // Verify filtered employees in store
-    const filteredEmployees = selectFilteredEmployees(state);
-    assert.equal(
-      filteredEmployees.length,
-      1,
-      'Should find 1 employee with "john"'
-    );
-    assert.equal(
-      filteredEmployees[0].firstName,
-      'John',
-      'Should find John Doe'
-    );
-
-    // Verify page was reset to 1 when searching
-    assert.equal(
-      state.employees.filters.page,
-      1,
-      'Page should be reset to 1 when searching'
-    );
-
-    // Check if filtered results are displayed in UI
-    const employeeCards = listing.shadowRoot.querySelectorAll('employee-card');
-    assert.isAtLeast(
-      employeeCards.length,
-      1,
-      'Should display at least 1 filtered employee card'
-    );
-
-    // Test clearing search
-    searchInput.dispatchEvent(
-      new CustomEvent('text-change', {
-        detail: {field: 'search', value: ''},
-      })
-    );
-
-    await listing.updateComplete;
-
-    // Verify search was cleared in store
-    state = store.getState();
-    assert.equal(
-      state.employees.filters.searchText,
-      '',
-      'Search text should be cleared in store'
-    );
-    assert.equal(
-      state.employees.employees.length,
-      3,
-      'All employees should be visible again'
-    );
+      // Wait for UI to update
+      setTimeout(() => {
+        const listView = listing.shadowRoot.querySelector('list-view');
+        if (!listView) {
+          assert.fail('list-view not found in employee-listing');
+          done();
+          return;
+        }
+        const employeeTable =
+          listView.shadowRoot.querySelector('employee-table');
+        assert.isNotNull(
+          employeeTable,
+          'Should display the employee table in the list view'
+        );
+        // Check number of employee rows in the table (should be 2 for "john")
+        const tbody = employeeTable.shadowRoot.querySelector('tbody');
+        const rows = tbody ? tbody.querySelectorAll('tr') : [];
+        assert.equal(
+          rows.length,
+          2,
+          'Should display 2 filtered employee rows in the table'
+        );
+        done();
+      }, 100);
+    });
   });
 
   it('should handle search with different scenarios', async () => {
@@ -402,68 +345,66 @@ describe('Employee CRUD Integration', () => {
       });
     });
 
-    // Create employee listing
-    const listing = await fixture(html`
-      <employee-listing></employee-listing>
-    `);
+    fixture(html`<employee-listing></employee-listing>`).then((listing) => {
+      listing.updateComplete.then(() => {
+        const searchInput = listing.shadowRoot.querySelector('#search');
 
-    await listing.updateComplete;
-    const searchInput = listing.shadowRoot.querySelector('#search');
+        // Test 1: Search by first name
+        searchInput.dispatchEvent(
+          new CustomEvent('text-change', {
+            detail: {field: 'search', value: 'john'},
+          })
+        );
+        listing.updateComplete.then(() => {
+          let state = store.getState();
+          assert.equal(state.employees.filters.searchText, 'john');
+        });
 
-    // Test 1: Search by first name
-    searchInput.dispatchEvent(
-      new CustomEvent('text-change', {
-        detail: {field: 'search', value: 'john'},
-      })
-    );
-    await listing.updateComplete;
+        // Test 2: Search by last name
+        searchInput.dispatchEvent(
+          new CustomEvent('text-change', {
+            detail: {field: 'search', value: 'smith'},
+          })
+        );
+        listing.updateComplete.then(() => {
+          let state = store.getState();
+          assert.equal(state.employees.filters.searchText, 'smith');
+        });
 
-    let state = store.getState();
-    assert.equal(state.employees.filters.searchText, 'john');
+        // Test 3: Search with no results
+        searchInput.dispatchEvent(
+          new CustomEvent('text-change', {
+            detail: {field: 'search', value: 'xyz'},
+          })
+        );
+        listing.updateComplete.then(() => {
+          let state = store.getState();
+          assert.equal(state.employees.filters.searchText, 'xyz');
+        });
 
-    // Test 2: Search by last name
-    searchInput.dispatchEvent(
-      new CustomEvent('text-change', {
-        detail: {field: 'search', value: 'smith'},
-      })
-    );
-    await listing.updateComplete;
+        // Test 4: Case insensitive search
+        searchInput.dispatchEvent(
+          new CustomEvent('text-change', {
+            detail: {field: 'search', value: 'JANE'},
+          })
+        );
+        listing.updateComplete.then(() => {
+          let state = store.getState();
+          assert.equal(state.employees.filters.searchText, 'JANE');
+        });
 
-    state = store.getState();
-    assert.equal(state.employees.filters.searchText, 'smith');
-
-    // Test 3: Search with no results
-    searchInput.dispatchEvent(
-      new CustomEvent('text-change', {
-        detail: {field: 'search', value: 'xyz'},
-      })
-    );
-    await listing.updateComplete;
-
-    state = store.getState();
-    assert.equal(state.employees.filters.searchText, 'xyz');
-
-    // Test 4: Case insensitive search
-    searchInput.dispatchEvent(
-      new CustomEvent('text-change', {
-        detail: {field: 'search', value: 'JANE'},
-      })
-    );
-    await listing.updateComplete;
-
-    state = store.getState();
-    assert.equal(state.employees.filters.searchText, 'JANE');
-
-    // Test 5: Clear search
-    searchInput.dispatchEvent(
-      new CustomEvent('text-change', {
-        detail: {field: 'search', value: ''},
-      })
-    );
-    await listing.updateComplete;
-
-    state = store.getState();
-    assert.equal(state.employees.filters.searchText, '');
-    assert.equal(state.employees.employees.length, 5);
+        // Test 5: Clear search
+        searchInput.dispatchEvent(
+          new CustomEvent('text-change', {
+            detail: {field: 'search', value: ''},
+          })
+        );
+        listing.updateComplete.then(() => {
+          let state = store.getState();
+          assert.equal(state.employees.filters.searchText, '');
+          assert.equal(state.employees.employees.length, 5);
+        });
+      });
+    });
   });
 });

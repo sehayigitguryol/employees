@@ -1,8 +1,14 @@
 import {LitElement, html, css} from 'lit';
 import '../components/base-layout.js';
-import {store} from '../store/ReduxProvider.js';
+import {store as importedStore} from '../store/index.js';
 import {selectEmployeeById} from '../store/employeesSlice.js';
 import './employee-form.js';
+import {Router} from '@vaadin/router';
+
+// Get store dynamically to use window.store for testing, fall back to imported store
+function getStore() {
+  return window.store || importedStore;
+}
 
 export class EmployeeEdit extends LitElement {
   static get properties() {
@@ -35,15 +41,24 @@ export class EmployeeEdit extends LitElement {
   }
 
   _checkEmployeeExists() {
-    // Get current state from store
-    const state = store.getState();
-    const employee = selectEmployeeById(state, this.employeeId);
+    const storeInstance = getStore();
+    console.log(
+      '[employee-edit] getStore() === window.store:',
+      storeInstance === window.store
+    );
+    console.log(
+      '[employee-edit] getStore().getState():',
+      storeInstance.getState()
+    );
+    const employee = selectEmployeeById(
+      storeInstance.getState(),
+      this.employeeId
+    );
+    console.log('[employee-edit] selectEmployeeById result:', employee);
 
-    // Find employee by ID
     this.employee = employee;
 
     if (this.employee) {
-      console.log('Employee found:', this.employee);
       this.loading = false;
     } else {
       console.log('Employee not found, redirecting to 404');
@@ -52,8 +67,8 @@ export class EmployeeEdit extends LitElement {
   }
 
   _redirectTo404() {
-    // Navigate to 404 page
-    window.location.href = '/404';
+    // SPA navigation to 404 page using Vaadin Router
+    Router.go('/404');
   }
 
   static get styles() {

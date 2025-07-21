@@ -106,7 +106,6 @@ export class EmployeeForm extends LitElement {
     this.validationErrors = {};
     this.showPrompt = false;
     this.showConfirmDialog = false;
-    this._debounceTimeout = null;
     this.isCreate = false;
   }
 
@@ -119,16 +118,13 @@ export class EmployeeForm extends LitElement {
   }
 
   _initializeForm() {
-    console.log('🔧 Initializing form with employee:', this.employee);
     // Dispatch the appropriate action based on whether we're editing or creating
     if (this.employee) {
       getStore().dispatch(setForm(this.employee));
       this.isCreate = false;
-      console.log('🔧 Form set to edit mode');
     } else {
       getStore().dispatch(resetForm());
       this.isCreate = true;
-      console.log('🔧 Form set to create mode');
     }
 
     // Get state after dispatching
@@ -143,7 +139,6 @@ export class EmployeeForm extends LitElement {
 
     // Set initial form data immediately
     this.formData = selectForm(newState);
-    console.log('🔧 Initial form data:', this.formData);
   }
 
   disconnectedCallback() {
@@ -153,9 +148,6 @@ export class EmployeeForm extends LitElement {
     }
     if (this.languageUnsubscribe) {
       this.languageUnsubscribe();
-    }
-    if (this._debounceTimeout) {
-      clearTimeout(this._debounceTimeout);
     }
   }
 
@@ -174,22 +166,13 @@ export class EmployeeForm extends LitElement {
         [field]: value,
       };
 
-      console.log('🔧 Updating form field:', field, 'to:', value);
-      console.log('🔧 Updated form data:', updatedForm);
       getStore().dispatch(setForm(updatedForm));
     }
   }
 
   _handleFieldChange(e) {
     const {value, field} = e.detail;
-
-    if (this._debounceTimeout) {
-      clearTimeout(this._debounceTimeout);
-    }
-
-    this._debounceTimeout = setTimeout(() => {
-      this._updateFormField(field, value);
-    }, 300);
+    this._updateFormField(field, value);
   }
 
   _validateForm() {
@@ -197,7 +180,6 @@ export class EmployeeForm extends LitElement {
   }
 
   async _handleSubmit(e) {
-    console.log('🔧 Submitting form');
     e.preventDefault();
 
     // Validate the form
@@ -228,21 +210,9 @@ export class EmployeeForm extends LitElement {
       // Set loading state
       this.shadowRoot.getElementById('confirmDialog').setLoading(true);
 
-      // Simulate API call - remove the timeout for testing
-      // await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      console.log('🔧 Dispatching addEmployee with formData:', this.formData);
-      console.log(
-        '🔧 Using store:',
-        getStore() === window.store ? 'window.store' : 'importedStore'
-      );
-      console.log('🔧 Form isCreate:', this.isCreate);
-      console.log('🔧 Form employee:', this.employee);
       if (this.isCreate) {
-        console.log('🔧 Creating new employee');
         getStore().dispatch(addEmployee(this.formData));
       } else {
-        console.log('🔧 Updating existing employee');
         getStore().dispatch(updateEmployee(this.formData));
       }
 
@@ -261,7 +231,8 @@ export class EmployeeForm extends LitElement {
 
   _handleCancel() {
     getStore().dispatch(resetForm());
-    window.history.back();
+    window.history.pushState(null, '', '/');
+    window.dispatchEvent(new PopStateEvent('popstate'));
   }
 
   render() {

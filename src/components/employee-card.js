@@ -4,6 +4,7 @@ import {store as importedStore} from '../store/index.js';
 import {removeEmployee} from '../store/employeesSlice.js';
 import 'iconify-icon';
 import './button.js';
+import './dialog.js';
 
 // Get store dynamically to use window.store for testing, fall back to imported store
 function getStore() {
@@ -183,7 +184,6 @@ export class EmployeeCard extends LitElement {
 
   _handleConfirmDelete() {
     this.showConfirmDialog = false;
-    console.log('🔧 Deleting employee with ID:', this.employee.id);
     getStore().dispatch(removeEmployee(this.employee.id));
   }
 
@@ -258,7 +258,11 @@ export class EmployeeCard extends LitElement {
         </div>
 
         <div class="card-actions">
-          <app-button variant="primary" @click="${this._handleEdit}">
+          <app-button
+            variant="primary"
+            @click="${this._handleEdit}"
+            id="edit-button-${this.employee.id}"
+          >
             <span slot="icon">
               <iconify-icon icon="mdi:pencil" width="16"></iconify-icon>
             </span>
@@ -266,7 +270,7 @@ export class EmployeeCard extends LitElement {
           </app-button>
           <app-button
             variant="secondary"
-            id="delete-button"
+            id="delete-button-${this.employee.id}"
             @click="${this._handleDelete}"
           >
             <span slot="icon">

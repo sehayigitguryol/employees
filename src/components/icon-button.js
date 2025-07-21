@@ -7,6 +7,7 @@ export class IconButton extends LitElement {
       icon: {type: String},
       size: {type: String},
       color: {type: String},
+      id: {type: String},
     };
   }
 
@@ -50,15 +51,7 @@ export class IconButton extends LitElement {
   }
 
   _handleClick() {
-    this.dispatchEvent(
-      new CustomEvent('icon-click', {
-        detail: {
-          icon: this.icon,
-        },
-        bubbles: true,
-        composed: true,
-      })
-    );
+    this.dispatchEvent(new Event('click', {bubbles: true, composed: true}));
   }
 
   render() {
@@ -67,6 +60,7 @@ export class IconButton extends LitElement {
         class="icon-button"
         @click="${this._handleClick}"
         title="${this.icon}"
+        id="${this.id}"
       >
         <iconify-icon
           icon="${this.icon}"

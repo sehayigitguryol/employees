@@ -131,7 +131,7 @@ export class EmployeeTable extends LitElement {
     }
     return html`
       <div class="table-responsive">
-        <table>
+        <table id="employee-table">
           <thead>
             <tr>
               <th>${i18nStore.translate('employee.details.firstName')}</th>
@@ -150,7 +150,7 @@ export class EmployeeTable extends LitElement {
           <tbody>
             ${this.employees.map(
               (emp) => html`
-                <tr>
+                <tr id="employee-row-${emp.id}">
                   <td>${emp.firstName}</td>
                   <td>${emp.lastName}</td>
                   <td>${emp.dateOfEmployment}</td>
@@ -161,11 +161,13 @@ export class EmployeeTable extends LitElement {
                   <td>${emp.position}</td>
                   <td class="actions">
                     <icon-button
+                      id="edit-btn-${emp.id}"
                       icon="mdi:pencil"
                       title="${i18nStore.translate('actions.edit')}"
                       @click=${() => this._handleEdit(emp)}
                     ></icon-button>
                     <icon-button
+                      id="delete-btn-${emp.id}"
                       icon="mdi:delete"
                       title="${i18nStore.translate('actions.delete')}"
                       @click=${() => this._handleDelete(emp)}

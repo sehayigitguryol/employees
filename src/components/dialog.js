@@ -96,6 +96,7 @@ export class Dialog extends LitElement {
               variant="secondary"
               @click=${this._handleCancel}
               ?disabled=${this.loading}
+              id="cancel-button"
             >
               ${this.cancelText}
             </app-button>
@@ -103,6 +104,7 @@ export class Dialog extends LitElement {
               variant="primary"
               @click=${this._handleConfirm}
               ?disabled=${this.loading}
+              id="confirm-button"
             >
               ${this.loading ? 'Loading...' : this.confirmText}
             </app-button>

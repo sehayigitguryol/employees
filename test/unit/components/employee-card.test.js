@@ -86,10 +86,12 @@ describe('employee-card', () => {
       return originalDispatchEvent.call(window, event);
     };
 
-    const editButton = el.shadowRoot.querySelector('.btn.edit');
+    const editButton = el.shadowRoot.querySelector('#edit-button-1');
     assert.exists(editButton);
-
-    editButton.click();
+    await editButton.updateComplete;
+    const nativeEditButton = editButton.shadowRoot.querySelector('button');
+    assert.exists(nativeEditButton);
+    nativeEditButton.click();
 
     // Check that navigation was triggered
     assert.isTrue(pushStateCalled);
@@ -110,10 +112,12 @@ describe('employee-card', () => {
     // Initially dialog should not be shown
     assert.isFalse(el.showConfirmDialog);
 
-    const deleteButton = el.shadowRoot.querySelector('.btn.delete');
+    const deleteButton = el.shadowRoot.querySelector('#delete-button-1');
     assert.exists(deleteButton);
-
-    deleteButton.click();
+    await deleteButton.updateComplete;
+    const nativeDeleteButton = deleteButton.shadowRoot.querySelector('button');
+    assert.exists(nativeDeleteButton);
+    nativeDeleteButton.click();
 
     // After clicking delete, dialog should be shown
     assert.isTrue(el.showConfirmDialog);
@@ -129,8 +133,10 @@ describe('employee-card', () => {
     // Initially dialog should not be shown
     assert.isFalse(el.showConfirmDialog);
 
-    const deleteButton = el.shadowRoot.querySelector('.btn.delete');
-    deleteButton.click();
+    const deleteButton = el.shadowRoot.querySelector('#delete-button-1');
+    await deleteButton.updateComplete;
+    const nativeDeleteButton = deleteButton.shadowRoot.querySelector('button');
+    nativeDeleteButton.click();
 
     // After clicking delete, dialog should be shown
     assert.isTrue(el.showConfirmDialog);
@@ -156,13 +162,10 @@ describe('employee-card', () => {
     const card = el.shadowRoot.querySelector('.card');
     assert.exists(card);
 
-    const editButton = el.shadowRoot.querySelector('.btn.edit');
-    const deleteButton = el.shadowRoot.querySelector('.btn.delete');
-
+    const editButton = el.shadowRoot.querySelector('#edit-button-1');
+    const deleteButton = el.shadowRoot.querySelector('#delete-button-1');
     assert.exists(editButton);
     assert.exists(deleteButton);
-    assert.include(editButton.className, 'edit');
-    assert.include(deleteButton.className, 'delete');
   });
 
   it('displays employee details', async () => {
@@ -190,23 +193,23 @@ describe('employee-card', () => {
 
     await el.updateComplete;
 
-    const editButton = el.shadowRoot.querySelector('.btn.edit');
+    const editButton = el.shadowRoot.querySelector('#edit-button-1');
     assert.exists(editButton);
-
+    await editButton.updateComplete;
+    const nativeEditButton = editButton.shadowRoot.querySelector('button');
+    assert.exists(nativeEditButton);
     // Test keyboard navigation
-    editButton.focus();
-
+    nativeEditButton.focus();
     // In shadow DOM, the active element might be the component itself
     // Let's check if the button is focused within the shadow root
-    const focusedElement = el.shadowRoot.activeElement;
-    assert.equal(focusedElement, editButton);
-
+    const focusedElement = editButton.shadowRoot.activeElement;
+    assert.equal(focusedElement, nativeEditButton);
     // Test Enter key
     const enterEvent = new KeyboardEvent('keydown', {
       key: 'Enter',
       bubbles: true,
     });
-    editButton.dispatchEvent(enterEvent);
+    nativeEditButton.dispatchEvent(enterEvent);
   });
 
   it('handles accessibility attributes', async () => {
@@ -216,10 +219,8 @@ describe('employee-card', () => {
 
     await el.updateComplete;
 
-    const editButton = el.shadowRoot.querySelector('.btn.edit');
-    const deleteButton = el.shadowRoot.querySelector('.btn.delete');
-
-    // Check for proper ARIA attributes
+    const editButton = el.shadowRoot.querySelector('#edit-button-1');
+    const deleteButton = el.shadowRoot.querySelector('#delete-button-1');
     assert.exists(editButton);
     assert.exists(deleteButton);
   });
@@ -262,14 +263,20 @@ describe('employee-card', () => {
 
     // Find and click confirm button
     const dialog = el.shadowRoot.querySelector('app-dialog');
-    if (dialog) {
-      const confirmEvent = new CustomEvent('confirm', {bubbles: true});
-      dialog.dispatchEvent(confirmEvent);
-    }
+    assert.exists(dialog, 'Dialog should exist in shadowRoot');
+    await dialog.updateComplete;
+
+    const confirmBtn =
+      dialog.shadowRoot && dialog.shadowRoot.querySelector('#confirm-button');
+    assert.exists(
+      confirmBtn,
+      'Confirm button should exist in dialog shadowRoot'
+    );
+    confirmBtn.click();
 
     // Check that dispatch was called
     if (window.store) {
-      assert.isTrue(dispatchCalled);
+      assert.isTrue(dispatchCalled, 'Store dispatch should be called');
       window.store.dispatch = originalDispatch;
     }
   });
