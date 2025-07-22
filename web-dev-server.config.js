@@ -12,8 +12,6 @@ export default {
   nodeResolve: true,
   preserveSymlinks: true,
   plugins: [fromRollup(nodeResolve), fromRollup(replace)],
-  // Add this configuration for SPA routing
   appIndex: 'index.html',
-  // This tells the server to serve index.html for all routes
   historyApiFallback: true,
 };

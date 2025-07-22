@@ -127,8 +127,12 @@ export const selectFilteredEmployees = (state) => {
 
   return employees.filter(
     (employee) =>
-      employee.firstName?.toLowerCase().includes(searchText.toLowerCase()) ||
-      employee.lastName?.toLowerCase().includes(searchText.toLowerCase())
+      employee.firstName
+        ?.toLocaleLowerCase('tr')
+        .includes(searchText.toLocaleLowerCase('tr')) ||
+      employee.lastName
+        ?.toLocaleLowerCase('tr')
+        .includes(searchText.toLocaleLowerCase('tr'))
   );
 };
 

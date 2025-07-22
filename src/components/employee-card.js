@@ -156,7 +156,6 @@ export class EmployeeCard extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
-    // Subscribe to language changes
     this.languageUnsubscribe = i18nStore.subscribe(() => this.requestUpdate());
   }
 
@@ -168,7 +167,6 @@ export class EmployeeCard extends LitElement {
   }
 
   _handleEdit() {
-    // Navigate to edit page
     window.history.pushState(null, '', `/edit/${this.employee.id}`);
     window.dispatchEvent(new PopStateEvent('popstate'));
   }

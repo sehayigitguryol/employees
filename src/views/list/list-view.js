@@ -123,7 +123,7 @@ export class ListView extends LitElement {
       this.error = selectError(state);
       this.requestUpdate();
     });
-    // Subscribe to language changes
+
     this.languageUnsubscribe = i18nStore.subscribe(() => {
       this.requestUpdate();
     });
@@ -150,8 +150,8 @@ export class ListView extends LitElement {
       </div>`;
     }
     return html`
-      <employee-table .employees=${this.employees}></employee-table>
-      <app-pagination></app-pagination>
+      <employee-table .employees=${this.employees} />
+      <app-pagination />
     `;
   }
 }

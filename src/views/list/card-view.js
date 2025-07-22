@@ -80,16 +80,13 @@ export class CardView extends LitElement {
   connectedCallback() {
     super.connectedCallback();
 
-    // Get initial state immediately
     const initialState = getStore().getState();
     this.employees = selectPaginatedEmployees(initialState);
     this.loading = selectLoading(initialState);
     this.error = selectError(initialState);
 
-    // Force initial render
     this.requestUpdate();
 
-    // Subscribe to store changes
     this.unsubscribe = getStore().subscribe(() => {
       const state = getStore().getState();
       this.employees = selectPaginatedEmployees(state);
@@ -97,7 +94,6 @@ export class CardView extends LitElement {
       this.error = selectError(state);
     });
 
-    // Subscribe to language changes
     this.languageUnsubscribe = i18nStore.subscribe(() => {
       this.requestUpdate();
     });
@@ -133,12 +129,10 @@ export class CardView extends LitElement {
     return html`
       <div class="card-grid">
         ${this.employees.map(
-          (employee) => html`
-            <employee-card .employee=${employee}></employee-card>
-          `
+          (employee) => html` <employee-card .employee=${employee} /> `
         )}
       </div>
-      <app-pagination></app-pagination>
+      <app-pagination />
     `;
   }
 }

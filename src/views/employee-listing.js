@@ -63,7 +63,7 @@ export class EmployeeListing extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
-    // Subscribe to language changes
+
     this.unsubscribe = i18nStore.subscribe(() => this.requestUpdate());
   }
 
@@ -77,17 +77,16 @@ export class EmployeeListing extends LitElement {
   _handleTabChanged(event) {
     this.selectedTab = event.detail.activeTab;
 
-    // Reset page to 1 when view changes
     getStore().dispatch(setSize(this.selectedTab === 0 ? 10 : 6));
     getStore().dispatch(setPage(1));
 
-    this.requestUpdate(); // Force re-render
+    this.requestUpdate();
   }
 
   _handleSearchChange(event) {
     this.searchValue = event.detail.value;
     getStore().dispatch(setSearchText(this.searchValue));
-    getStore().dispatch(setPage(1)); // Reset to first page when searching
+    getStore().dispatch(setPage(1));
   }
 
   render() {

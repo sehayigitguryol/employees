@@ -55,7 +55,7 @@ export class Tabs extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
-    // Subscribe to language changes
+
     this.unsubscribe = i18nStore.subscribe(() => this.requestUpdate());
   }
 

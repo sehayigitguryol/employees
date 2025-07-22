@@ -207,7 +207,6 @@ export class EmployeeForm extends LitElement {
 
   async _saveEmployee() {
     try {
-      // Set loading state
       this.shadowRoot.getElementById('confirmDialog').setLoading(true);
 
       if (this.isCreate) {
@@ -216,9 +215,6 @@ export class EmployeeForm extends LitElement {
         getStore().dispatch(updateEmployee(this.formData));
       }
 
-      // Show success message or redirect
-
-      // Reset form and navigate to employee list
       getStore().dispatch(resetForm());
       window.history.pushState(null, '', '/');
       window.dispatchEvent(new PopStateEvent('popstate'));
@@ -236,7 +232,6 @@ export class EmployeeForm extends LitElement {
   }
 
   render() {
-    // Handle case where formData is not yet available
     if (!this.formData) {
       return html`<div>${i18nStore.translate('message.loading')}</div>`;
     }
@@ -385,7 +380,7 @@ export class EmployeeForm extends LitElement {
               @click="${this._handleCancel}"
             >
               <span slot="icon">
-                <iconify-icon icon="mdi:cancel" width="16"></iconify-icon>
+                <iconify-icon icon="mdi:cancel" width="16" />
               </span>
               ${i18nStore.translate('actions.cancel')}
             </app-button>
@@ -394,7 +389,7 @@ export class EmployeeForm extends LitElement {
                 <iconify-icon
                   icon="${this.employee ? 'mdi:content-save' : 'mdi:plus'}"
                   width="16"
-                ></iconify-icon>
+                />
               </span>
               ${this.employee
                 ? i18nStore.translate('actions.save')
@@ -417,7 +412,7 @@ export class EmployeeForm extends LitElement {
         ?open=${this.showConfirmDialog}
         @cancel=${this._handleCancelSave}
         @confirm=${this._handleConfirmSave}
-      ></app-dialog>
+      />
     `;
   }
 }
